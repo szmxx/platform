@@ -135,6 +135,7 @@ export default defineConfig({
       sm: '1px 1px 2px 0.1px var(--color-shadow)',
       md: '1px 2px 4px 0.1px var(--color-shadow)',
       lg: '2px 4px 4px 0.1px var(--color-shadow)',
+      '-lg': '-2px -4px 4px 0.1px var(--color-shadow)',
     },
   },
   presets: [

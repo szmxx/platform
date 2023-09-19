@@ -5,11 +5,10 @@
  * @Description:
 -->
 <script setup lang="ts">
-import { name } from "./package.json";
-
-useHead({
-  title: name,
-});
+  const config = useRuntimeConfig()
+  useHead({
+    title: config?.public?.name,
+  })
 </script>
 
 <template>

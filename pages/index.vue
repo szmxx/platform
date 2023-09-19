@@ -10,10 +10,10 @@
 
 <template>
   <Suspense>
-    <Counter v-if="online" />
-    <div v-else text-gray:80>You're offline</div>
+    <Home v-if="online"></Home>
+    <div v-else text-hint>You're offline</div>
     <template #fallback>
-      <div italic op50>
+      <div>
         <span animate-pulse>Loading...</span>
       </div>
     </template>

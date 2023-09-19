@@ -4,13 +4,22 @@
  * @LastEditors: cola
  * @Description:
 -->
-<script setup>
-  const { t } = useI18n()
-</script>
+<script setup></script>
 <template>
-  <main class="center h-full w-full flex-col gap-y-2">
-    <slot />
-    <Footer />
-    <div class="text-auxiliary">[{{ t('default_layout') }}]</div>
+  <main class="w-full flex flex-col h-full overflow-hidden">
+    <Header></Header>
+    <div class="flex-1 bg-cover">
+      <div class="bg absolute w-full h-92%"></div>
+      <slot />
+    </div>
+    <DarkToggle class="absolute right-4 top-4" />
   </main>
 </template>
+
+<style lang="scss" scoped>
+  .bg {
+    background-image: url('~/assets/bg.png');
+
+    @apply bg-cover bg-no-repeat blur-4 z-0 pointer-events-none;
+  }
+</style>
