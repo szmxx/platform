@@ -1,17 +1,17 @@
 <template>
-  <div class="flex flex-col h-full gap-y-4 p-4 w-full">
+  <div class="flex flex-col h-full gap-y-4 pt-4 pb-8 w-full">
     <div class="relative flex-1 rounded overflow-hidden center">
-      <div class="absolute gradient top-3% <sm:top-10% text-14">
+      <div class="absolute gradient top-2% <sm:top-6% text-14 <sm:text-10">
         迎国庆换新颜
       </div>
       <UiUpload class="-mt-20" @change="onUpload">
         <div
           ref="containerRef"
-          class="box-border h-85 overflow-hidden border-white rounded-32px aspect-1/1 relative"
+          class="box-border h-75 <sm:h-55 overflow-hidden border-white rounded-32px aspect-1/1 relative"
         >
           <img
             ref="imgRef"
-            src="~/assets/guoqin/template.png"
+            src="/template.png"
             class="h-full object-cover rounded-28px aspect-1/1"
           />
           <div :class="currentTemplate" class="rounded-28px"></div>
@@ -25,37 +25,37 @@
           v-for="item in templateList"
           :key="item.className"
           :data-class="item.className"
-          class="relative border rounded center hover:border-primary p-1"
+          class="relative rounded cursor-pointer center p-1 border"
         >
           <img
             :src="item.src"
             :data-class="item.className"
             class="h-20 min-w-20 object-cover rounded"
-            :alt="item.name"
+            :alt="item.className"
           />
           <div
             v-show="item.className === currentTemplate"
-            class="pointer-events-none bg-dark/30 absolute w-full h-full center"
+            class="pointer-events-none bg-dark/30 rounded absolute w-full h-full center"
           >
-            <div i-carbon-checkmark-filled class="bg-success"></div>
+            <div i-ion-checkmark-circled class="bg-success"></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="flex items-center gap-x-4">
+    <div class="flex items-center px-4 gap-x-4">
       <UiUpload @change="onUpload">
         <button
           class="shadow-sm gap-x-1 center border-t border-l rounded py-2 px-4"
         >
-          <div i-carbon-add></div>
+          <div i-ion-plus-round></div>
           <span>上传头像</span>
         </button>
       </UiUpload>
       <button
-        class="shadow-sm gap-x-2 center border-t border-l rounded py-2 px-4"
+        class="shadow-sm gap-x-1 center border-t border-l rounded py-2 px-4"
         @click="onDownload"
       >
-        <div i-carbon-download class="text-xs"></div>
+        <div i-ion-md-download></div>
         <span>下载头像</span>
       </button>
     </div>
@@ -108,8 +108,8 @@
     reader.readAsDataURL(evt[0])
   }
 
-  function onDownload() {
-    exportImage(containerRef.value, 'avatar.png')
+  async function onDownload() {
+    await exportImage(containerRef.value, '图片.png')
   }
 
   const currentTemplate = ref(state.value.class || 'mask-0')
@@ -147,13 +147,12 @@
     @apply bg-cover border-12 border-b-0 border-danger absolute top-0 left-0 h-full w-full;
 
     &::before {
-      font-size: 40px;
       /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
       font-family: font-ziti;
-      content: '国庆快乐！';
-      line-height: 40px;
+      content: '国庆快乐';
+      line-height: 1;
 
-      @apply absolute bottom-0 rounded-b-3 text-white bg-danger center w-full p-2;
+      @apply absolute text-8 sm:text-10 bottom-0 rounded-b-3 text-white bg-danger center w-full p-2;
     }
   }
 
@@ -166,7 +165,7 @@
   }
 
   .mask-3 {
-    @apply absolute bottom-3 border-4 border-white right-3 h-15 w-1/4  rounded-0 bg-cover rounded-2 overflow-hidden p-1;
+    @apply absolute bottom-3 border-4 border-white right-3 h-1/6 w-1/4 rounded-0 bg-cover rounded-2 overflow-hidden p-1;
 
     background-image: url('~/assets/guoqin/0.png');
   }

@@ -8,7 +8,7 @@
 <template>
   <main class="w-full flex flex-col h-full overflow-hidden">
     <Header></Header>
-    <div class="flex-1 bg-cover">
+    <div class="flex-1 bg-cover overflow-y-auto">
       <div class="bg absolute w-full h-92%"></div>
       <slot />
     </div>

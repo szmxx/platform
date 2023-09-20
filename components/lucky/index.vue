@@ -8,7 +8,7 @@
   <div class="flex-col h-full center gap-y-4 p-4 w-full">
     <div
       v-show="current"
-      class="selected absolute top-40 sm:top-30 w-full center text-8 flex transition-all"
+      class="selected absolute top-30 sm:top-30 w-full center text-10 flex transition-all"
     >
       <span>恭喜中奖</span>
       <span class="text-primary truncate max-w-60%">{{ current }}</span>
@@ -16,6 +16,8 @@
     <LuckyPanel
       :data="list"
       spin-type="panel"
+      :width="width"
+      :height="width"
       @update="update"
       @complete="completeHandler"
     ></LuckyPanel>
@@ -23,12 +25,12 @@
       class="absolute cursor-pointer bottom-4 p-4 bg-default rounded-full right-4 shadow-sm"
       @click="isEdited = !isEdited"
     >
-      <div i-carbon-edit></div>
+      <div i-ion-edit></div>
     </div>
     <div v-show="isEdited" class="absolute bg-dark/30 top-0 z-1 h-full w-full">
       <div
         :class="{ 'slide-out': isEdited }"
-        class="w-80 h-full right-0 absolute bg-default"
+        class="w-70 h-full right-0 transition-all absolute bg-default"
       >
         <LuckyEdit
           :data="list"
@@ -60,6 +62,12 @@
     isEdited.value = false
     state.value = value
   }
+
+  const width = ref(400)
+  const isMobile = isMobileDevice()
+  if (isMobile) {
+    width.value = 340
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -73,20 +81,15 @@
     }
 
     100% {
-      @apply w-80;
+      @apply w-70;
     }
   }
 
   .selected {
     /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: font-ziti;
-    color: transparent;
-    background-clip: text;
     line-height: 1;
-    background-image: linear-gradient(
-      to right,
-      rgb(var(--color-primary)),
-      rgb(var(--color-success))
-    );
+
+    @apply text-hint;
   }
 </style>

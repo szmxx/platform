@@ -31,10 +31,10 @@
       name: '抽奖',
       path: '/lucky',
     },
-    // {
-    //   name: '营销',
-    //   path: '/market',
-    // },
+    {
+      name: '营销',
+      path: '/market',
+    },
     // {
     //   name: '聊天',
     //   path: '/chat',

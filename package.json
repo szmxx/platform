@@ -48,7 +48,7 @@
     "changelogen": "changelogen --bump"
   },
   "dependencies": {
-    "@iconify-json/carbon": "^1.1.19",
+    "@iconify-json/ion": "^1.1.12",
     "@pinia/nuxt": "^0.4.11",
     "@vant/nuxt": "^1.0.2",
     "@vueuse/core": "^10.4.1",

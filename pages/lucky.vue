@@ -1,9 +1,3 @@
-<!--
- * @Author: cola
- * @Date: 2023-08-06 17:42:54
- * @LastEditors: cola
- * @Description:
--->
 <script setup lang="ts">
   const online = useOnline()
 </script>

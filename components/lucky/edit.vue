@@ -126,7 +126,7 @@
             :data-id="item.id"
             class="aspect-1/1 h-7 center cursor-pointer rounded-50% text-xs bg-danger text-white"
           >
-            <div :data-id="item.id" i-carbon-trash-can />
+            <div :data-id="item.id" i-ion-md-trash />
           </div>
           <van-field
             v-model="item.name"
@@ -161,7 +161,7 @@
                     v-show="
                       color === item.color || usedColorList.includes(color)
                     "
-                    i-carbon-checkmark-filled
+                    i-ion-checkmark-circled
                   />
                 </div>
               </div>
@@ -185,18 +185,14 @@
           data-type="add"
           class="item center border rounded flex-nowrap gap-x-1 px-2 py-1"
         >
-          <div>
-            <div i-carbon-add />
-          </div>
+          <div i-ion-plus-round />
           <span class="whitespace-nowrap">添加</span>
         </button>
         <button
           data-type="shuffle"
           class="item center border rounded flex-nowrap gap-x-2 px-2 py-1"
         >
-          <div class="text-xs">
-            <div i-carbon-shuffle />
-          </div>
+          <div i-ion-ios-shuffle-strong />
           <span class="whitespace-nowrap">洗牌</span>
         </button>
       </div>
