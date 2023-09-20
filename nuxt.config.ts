@@ -16,7 +16,13 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@vant/nuxt',
     '@nuxtjs/i18n',
+    '@nuxt/image-edge',
   ],
+
+  image: {
+    quality: 50,
+  },
+
   runtimeConfig: {
     public: {
       name: process.env.NUXT_APP_NAME,

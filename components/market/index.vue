@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center gap-y-8 pt-4 pb-8 px-4 w-full">
     <div ref="containerRef" class="relative">
-      <img
+      <nuxt-img
         :src="currentPath"
         class="max-h-100 <sm:max-h-65 relative z-9 w-auto object-cover"
       />
@@ -24,15 +24,18 @@
           class="shadow-sm gap-x-1 center border-t border-l rounded py-2 px-4"
         >
           <div i-ion-plus-round></div>
-          <span>上传头像</span>
+          <span>上传图片</span>
         </button>
       </UiUpload>
       <button
         class="shadow-sm gap-x-2 center border-t border-l rounded py-2 px-4"
         @click="onDownload"
       >
-        <div i-ion-md-download class="text-xs"></div>
-        <span>下载头像</span>
+        <div
+          i-ion-md-download
+          :class="{ 'i-ion-load-d! loading pointer-events-none': loading }"
+        ></div>
+        <span>下载图片</span>
       </button>
     </div>
   </div>
@@ -52,9 +55,16 @@
     // 读取文件内容
     reader.readAsDataURL(evt[0])
   }
-
+  const loading = ref()
   async function onDownload() {
-    await exportImage(containerRef.value, '图片.png')
+    try {
+      loading.value = true
+      await exportImage(containerRef.value, '图片.png')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
   }
 
   function onTemplate(className: string, path: unknown) {

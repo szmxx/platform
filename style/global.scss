@@ -1,5 +1,6 @@
 @use './theme/index.scss';
 @use './common/mixin' as *;
+@use './common/animation';
 
 /* stylelint-disable-next-line selector-id-pattern */
 html,

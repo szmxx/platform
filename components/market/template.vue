@@ -8,20 +8,27 @@
         v-for="item in templateMap[current]"
         :key="item.name"
         :data-class="item.name"
-        class="border center p-1 min-w-40 relative rounded"
+        class="border center cursor-pointer p-1 min-w-40 relative rounded"
         :class="{
           'border-primary':
             `${parentClass} ${item.className}` === currentClassName,
         }"
       >
-        <img
+        <nuxt-img
           :data-class="item.name"
           :src="item?.path?.default"
           class="w-auto relative max-h-20 object-cover"
         />
-        <div class="absolute pointer-events-none center text-xs truncate">
+        <div
+          class="absolute top-0 px-2 text-white bg-primary rounded pointer-events-none text-xs truncate"
+        >
           {{ item.name }}
         </div>
+        <img
+          src="/template.png"
+          class="absolute pointer-events-none w-1/4 h-1/2 object-cover"
+          alt="logo"
+        />
       </div>
     </div>
     <div class="flex gap-x-4 w-full overflow-x-auto" @click="onToggleType">
@@ -29,21 +36,23 @@
         v-for="item in templateList"
         :key="item.name"
         :data-name="item.name"
-        class="border center p-1 min-w-15 sm:min-w-40 relative rounded"
+        :class="{ 'border-primary': current === item.name }"
+        class="border center cursor-pointer p-1 min-w-15 sm:min-w-40 relative rounded"
       >
-        <img
+        <nuxt-img
           :data-name="item.name"
           :src="item?.path?.default"
           class="w-auto relative max-h-20 object-cover"
         />
-        <div class="absolute pointer-events-none center text-xs truncate">
-          {{ item.name }}
-        </div>
+        <img
+          src="/template.png"
+          class="absolute pointer-events-none <sm:w-1/2 w-1/4 h-1/2 object-cover"
+          alt="logo"
+        />
         <div
-          v-show="item.name === current"
-          class="pointer-events-none bg-dark/30 rounded absolute w-full h-full center"
+          class="absolute top-0 bg-primary px-2 rounded text-white pointer-events-none text-xs truncate"
         >
-          <div i-ion-checkmark-circled class="bg-success"></div>
+          {{ item.name }}
         </div>
       </div>
     </div>
@@ -60,22 +69,22 @@
   const templateList = [
     {
       name: 'iPhone',
-      path: await import('~/assets/iphone/iPhone/index.png'),
+      path: await import('~/assets/iphone/iPhone/iPhone 14.png'),
       className: 'mask-0',
     },
     {
       name: 'iPad',
-      path: await import('~/assets/iphone/iPad/index.png'),
+      path: await import('~/assets/iphone/iPad/iPad.png'),
       className: 'mask-1',
     },
     {
       name: 'Mac',
-      path: await import('~/assets/iphone/Mac/index.png'),
+      path: await import('~/assets/iphone/Mac/iMac.png'),
       className: 'mask-2',
     },
     {
       name: 'Watch',
-      path: await import('~/assets/iphone/Watch/index.png'),
+      path: await import('~/assets/iphone/Watch/Apple Watch Ultra.png'),
       className: 'mask-3',
     },
   ]
@@ -127,7 +136,7 @@
     Mac: [
       {
         name: 'iMac',
-        path: await import('~/assets/iphone/Mac/index.png'),
+        path: await import('~/assets/iphone/Mac/iMac.png'),
         className: 'mask-imac',
       },
       {

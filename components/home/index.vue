@@ -7,14 +7,15 @@
       <UiUpload class="-mt-20" @change="onUpload">
         <div
           ref="containerRef"
-          class="box-border h-75 <sm:h-55 overflow-hidden border-white rounded-32px aspect-1/1 relative"
+          class="box-border h-75 <sm:h-55 overflow-hidden border-white rounded-20px aspect-1/1 relative"
         >
           <img
             ref="imgRef"
             src="/template.png"
-            class="h-full object-cover rounded-28px aspect-1/1"
+            alt="logo"
+            class="h-full object-cover aspect-1/1"
           />
-          <div :class="currentTemplate" class="rounded-28px"></div>
+          <div :class="currentTemplate" class="rounded-20px"></div>
         </div>
       </UiUpload>
       <div
@@ -26,6 +27,7 @@
           :key="item.className"
           :data-class="item.className"
           class="relative rounded cursor-pointer center p-1 border"
+          :class="{ 'border-primary': item.className === currentTemplate }"
         >
           <img
             :src="item.src"
@@ -33,12 +35,6 @@
             class="h-20 min-w-20 object-cover rounded"
             :alt="item.className"
           />
-          <div
-            v-show="item.className === currentTemplate"
-            class="pointer-events-none bg-dark/30 rounded absolute w-full h-full center"
-          >
-            <div i-ion-checkmark-circled class="bg-success"></div>
-          </div>
         </div>
       </div>
     </div>
@@ -55,7 +51,10 @@
         class="shadow-sm gap-x-1 center border-t border-l rounded py-2 px-4"
         @click="onDownload"
       >
-        <div i-ion-md-download></div>
+        <div
+          i-ion-md-download
+          :class="{ 'i-ion-load-d! loading pointer-events-none': loading }"
+        ></div>
         <span>下载头像</span>
       </button>
     </div>
@@ -93,8 +92,11 @@
     },
   ]
   const state = useLocalStorage<Record<string, string>>(GUOQING_SETTING, {})
+  const currentTemplate = ref('mask-0')
+
   onMounted(() => {
     if (state.value.current) imgRef.value.src = state.value.current
+    if (state.value.class) currentTemplate.value = state.value.class
   })
   function onUpload(evt: FileList) {
     const reader = new FileReader()
@@ -107,12 +109,18 @@
     // 读取文件内容
     reader.readAsDataURL(evt[0])
   }
-
+  const loading = ref(false)
   async function onDownload() {
-    await exportImage(containerRef.value, '图片.png')
+    try {
+      loading.value = true
+      await exportImage(containerRef.value, '图片.png')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
   }
 
-  const currentTemplate = ref(state.value.class || 'mask-0')
   function onToggleTemp(evt: MouseEvent) {
     const className = (evt.target as HTMLElement).dataset.class
     if (className) {
@@ -138,7 +146,7 @@
 
   .mask-0 {
     background-image: url('~/assets/guoqin/0.png');
-    mask: linear-gradient(130deg, #000 10%, transparent 70%, transparent);
+    mask: linear-gradient(115deg, #000 10%, transparent 70%, transparent);
 
     @apply bg-cover absolute top-0 left-0 h-full w-full;
   }
@@ -152,13 +160,13 @@
       content: '国庆快乐';
       line-height: 1;
 
-      @apply absolute text-8 sm:text-10 bottom-0 rounded-b-3 text-white bg-danger center w-full p-2;
+      @apply absolute text-8 sm:text-10 bottom-0 text-white bg-danger center w-full p-2;
     }
   }
 
   .mask-2 {
     background-image: url('~/assets/guoqin/0.png');
-    mask: linear-gradient(130deg, #000 10%, transparent 70%, transparent);
+    mask: linear-gradient(115deg, #000 10%, transparent 70%, transparent);
     scale: -1 1;
 
     @apply bg-cover absolute top-0 left-0 h-full w-full;
@@ -171,7 +179,7 @@
   }
 
   .mask-4 {
-    mask: linear-gradient(130deg, #000 20%, transparent 70%, transparent);
+    mask: linear-gradient(115deg, #000 20%, transparent 70%, transparent);
 
     @apply bg-cover absolute -top-15 -left-20 h-full w-full;
 
@@ -180,7 +188,7 @@
   }
 
   .mask-5 {
-    mask: linear-gradient(130deg, #000 20%, transparent 70%, transparent);
+    mask: linear-gradient(115deg, #000 20%, transparent 70%, transparent);
 
     @apply bg-cover absolute -top-15 -right-20 h-full w-full;
 

@@ -27,7 +27,7 @@
     >
       <div i-ion-edit></div>
     </div>
-    <div v-show="isEdited" class="absolute bg-dark/30 top-0 z-1 h-full w-full">
+    <div v-show="isEdited" class="absolute bg-dark/30 top-0 z-99 h-full w-full">
       <div
         :class="{ 'slide-out': isEdited }"
         class="w-70 h-full right-0 transition-all absolute bg-default"
