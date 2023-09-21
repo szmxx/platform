@@ -108,7 +108,7 @@
     class="relative h-full pt-1 flex flex-col overflow-y-auto"
   >
     <van-form class="flex flex-1 flex-col gap-y-2 overflow-hidden">
-      <div class="flex pt-3 justify-between px-4 text-sm">
+      <div class="flex pt-3 justify-between pl-4 pr-5 text-sm">
         <span>名称</span>
         <span>权重</span>
       </div>
@@ -128,26 +128,20 @@
           >
             <div :data-id="item.id" i-ion-md-trash />
           </div>
-          <van-field
+          <input
             v-model="item.name"
-            clearable
-            class="rounded py-1 px-2 flex-1"
+            v-focus="true"
+            class="rounded p-1 w-full border-b text-sm"
             placeholder="请输入名称"
-            :rules="[
-              {
-                required: true,
-                message: '名称不能为空',
-              },
-            ]"
           />
           <UiPopover class="center">
             <div
-              class="h-7 w-7 rounded-50%"
+              class="h-7 w-7 rounded-50% cursor-pointer"
               :style="{ background: item.color }"
             />
             <template #content>
               <div
-                class="absolute z-9 right-15 top-8 mt-6 max-w-50 flex flex-wrap gap-2 rounded p-2 shadow-sm bg-default"
+                class="absolute z-9 right-15 top-5 mt-6 max-w-50 flex flex-wrap gap-2 rounded p-2 shadow-sm bg-default"
                 @click="onColorPick(item, $event)"
               >
                 <div

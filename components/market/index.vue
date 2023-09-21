@@ -1,29 +1,18 @@
 <template>
   <div class="flex flex-col items-center gap-y-8 pt-4 pb-8 px-4 w-full">
-    <div v-show="!skeletonLoading" ref="containerRef" class="relative">
-      <nuxt-img
-        :src="currentPath"
-        class="max-h-100 <sm:max-h-65 relative z-9 w-auto object-cover"
-        provider="cloudinary"
-        @load="onLoad"
-      />
-      <div :class="currentClassName" class="overflow-hidden">
-        <img
-          ref="imgRef"
-          :src="templateUrl"
-          class="object-cover w-full h-full"
-          alt="logo"
-        />
-        <MarketTool :class-name="currentClassName"></MarketTool>
-      </div>
+    <div
+      ref="containerRef"
+      class="w-fit center"
+      :class="{ 'w-full': component === 'Composite' }"
+    >
+      <component
+        :is="componentMap?.[component]"
+        :src="src"
+        :class-name="currentClassName"
+        :template="currentTemplate"
+      ></component>
     </div>
-    <van-skeleton v-show="skeletonLoading">
-      <template #template>
-        <van-skeleton-image
-          class="min-h-100 <sm:(min-h-65 min-w-32.5) rounded-6 min-w-50"
-        />
-      </template>
-    </van-skeleton>
+
     <MarketTemplate
       :current-class-name="currentClassName"
       @template="onTemplate"
@@ -52,20 +41,31 @@
 </template>
 
 <script setup lang="ts">
-  const containerRef = ref()
-  const imgRef = ref()
-  const currentClassName = ref('mask-0')
-  const currentPath = ref('iphone/iPhone/iPhone_14.png')
-  const templateUrl = useImg('/template.png')
+  const src = ref(useImg('/template.png'))
+
+  const componentMap = {
+    iPhone: resolveComponent('MarketTemplateIphone'),
+    iPad: resolveComponent('MarketTemplateIpad'),
+    Mac: resolveComponent('MarketTemplateMac'),
+    Watch: resolveComponent('MarketTemplateWatch'),
+    Composite: resolveComponent('MarketComposite'),
+  }
+
+  const component = ref<keyof typeof componentMap>('iPhone')
+
   function onUpload(evt: FileList) {
     const reader = new FileReader()
     reader.onload = function (event) {
-      imgRef.value.src = event?.target?.result
+      if (event?.target?.result) {
+        src.value = event?.target?.result.toString()
+      }
     }
     // 读取文件内容
     reader.readAsDataURL(evt[0])
   }
   const loading = ref()
+  const containerRef = ref()
+
   async function onDownload() {
     try {
       loading.value = true
@@ -77,14 +77,14 @@
     }
   }
 
-  function onTemplate(className: string, path: string) {
+  const currentClassName = ref('mask-0')
+  const currentTemplate = ref('iphone/iPhone/iPhone_14.png')
+
+  function onTemplate(opt: Record<string, string>) {
+    const { className, path, current } = opt
     currentClassName.value = className
-    currentPath.value = path
-  }
-  const skeletonLoading = ref(true)
-  function onLoad() {
-    console.log('loaded')
-    skeletonLoading.value = false
+    currentTemplate.value = path
+    component.value = current as keyof typeof componentMap
   }
 </script>
 

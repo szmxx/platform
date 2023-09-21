@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="'tool-' + className"
+    :class="['tool-' + className, { landscape: landscape }]"
     class="flex w-full text-xs absolute justify-between"
   >
     <div class="tool-item origin-top-left!">
@@ -29,6 +29,10 @@
       type: String,
       default: '',
     },
+    landscape: {
+      type: Boolean,
+      default: false,
+    },
   })
 </script>
 
@@ -42,49 +46,61 @@
   }
 
   .tool-mask-0 {
-    @apply top-3% left-10% w-80%;
+    @apply top-1.5% left-10% w-80%;
 
     .tool-item {
       /* stylelint-disable-next-line scss/operator-no-unspaced */
-      @apply <sm:scale-40 scale-60;
+      @apply scale-60 <sm:scale-45;
     }
   }
 
-  .tool-mask-0.mask-0-13 {
-    @apply top-3% left-10% w-80%;
-  }
-
   .tool-mask-1 {
-    @apply top-3% left-1% w-98%;
+    @apply top-3% left-0.5% w-99%;
   }
 
   .tool-mask-1.mask-ipad {
-    @apply top-7% left-3% w-94%;
+    @apply top-7% left-2% w-95%;
+
+    &.landscape {
+      @apply top-2% left-7% w-85%;
+    }
   }
 
   .tool-mask-1.mask-air {
-    @apply left-5% w-90%;
+    @apply left-4% w-91%;
+
+    &.landscape {
+      @apply top-3% left-3% w-93.5%;
+    }
   }
 
   .tool-mask-1.mask-mini {
-    @apply left-6% w-88%;
+    @apply left-5% w-89%;
+
+    &.landscape {
+      @apply top-4% left-3% w-93.5%;
+    }
   }
 
   .tool-mask-1.mask-pro {
-    @apply top-1% left-3% w-94%;
+    @apply top-1% left-2% w-95%;
+
+    &.landscape {
+      @apply top-0.5% left-1% w-97%;
+    }
   }
 
   .flex.tool-mask-2 {
     @apply absolute top-3.5% left-1% w-98%;
   }
 
-  .tool-mask-2.mask-imac {
+  .ool-mask-2.mask-imac {
     @apply top-2% left-3% w-94%;
   }
 
   .tool-mask-2.mask-pro-4,
   .tool-mask-2.mask-pro-5 {
-    @apply top-2% left-2% w-96%;
+    @apply top-1.5% left-1% w-97%;
   }
 
   .tool-mask-2.mask-pro16-5 {
@@ -92,7 +108,7 @@
   }
 
   .tool-mask-2.mask-pro16-4 {
-    @apply top-1.5% left-0.5% w-99%;
+    @apply top-1.5% left-0% w-99%;
   }
 
   .flex.tool-mask-3 {

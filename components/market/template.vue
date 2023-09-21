@@ -10,8 +10,8 @@
         :data-class="item.name"
         class="border center cursor-pointer p-1 min-w-40 relative rounded"
         :class="{
-          'border-primary':
-            `${parentClass} ${item.className}` === currentClassName,
+          'border-primary': `${item.className}` === currentClassName,
+          'max-w-40': current === 'Composite',
         }"
       >
         <nuxt-img
@@ -27,6 +27,7 @@
           {{ item.name }}
         </div>
         <nuxt-img
+          v-show="current !== 'Composite'"
           src="template.png"
           class="absolute pointer-events-none w-1/4 h-1/2 object-cover"
           alt="logo"
@@ -40,7 +41,7 @@
         :key="item.name"
         :data-name="item.name"
         :class="{ 'border-primary': current === item.name }"
-        class="border center cursor-pointer p-1 min-w-15 sm:min-w-40 relative rounded"
+        class="border center cursor-pointer p-1 min-w-30 sm:min-w-40 relative rounded"
       >
         <nuxt-img
           :data-name="item.name"
@@ -92,6 +93,11 @@
       name: 'Watch',
       path: 'iphone/Watch/Apple_Watch_Ultra.png',
       className: 'mask-3',
+    },
+    {
+      name: 'Composite',
+      path: 'iphone/Composite/iMac_Mac_iPad_iPhone.png',
+      className: 'mask-4',
     },
   ]
   const templateMap = {
@@ -193,10 +199,36 @@
         className: 'mask-s8',
       },
     ],
+    Composite: [
+      {
+        name: 'Double-iPhone',
+        path: 'iphone/Composite/Double_iPhone.png',
+        className: 'double-iphone',
+      },
+      {
+        name: 'Three-iPhone',
+        path: 'iphone/Composite/Three_iPhone.png',
+        className: 'three-iphone',
+      },
+      {
+        name: 'iPad-iPhone',
+        path: 'iphone/Composite/iPad_iPhone.png',
+        className: 'ipad-iphone',
+      },
+      {
+        name: 'Mac-iPad-iPhone',
+        path: 'iphone/Composite/Mac_iPad_iPhone.png',
+        className: 'mac-ipad-iphone',
+      },
+      {
+        name: 'iMac-Mac-iPad-iPhone',
+        path: 'iphone/Composite/iMac_Mac_iPad_iPhone.png',
+        className: 'imac-mac-ipad-iphone',
+      },
+    ],
   }
 
   const current = ref<keyof typeof templateMap>('iPhone')
-  const parentClass = ref('mask-0')
   const emit = defineEmits(['template'])
 
   const list = templateMap?.[current.value]
@@ -205,10 +237,6 @@
   function onToggleType(evt: MouseEvent) {
     const name = (evt.target as HTMLElement).dataset.name
     if (name) {
-      const className = templateList.find((i) => name === i.name)?.className
-      if (className) {
-        parentClass.value = className
-      }
       current.value = name as keyof typeof templateMap
       const list = templateMap?.[current.value]
       emitTemplate(list?.[0]?.name)
@@ -224,6 +252,10 @@
   function emitTemplate(name: string) {
     const list = templateMap[current.value]
     const item = list.find((i) => i.name === name)
-    emit('template', `${parentClass.value} ${item?.className}`, item?.path)
+    emit('template', {
+      className: item?.className,
+      path: item?.path,
+      current: current.value,
+    })
   }
 </script>
