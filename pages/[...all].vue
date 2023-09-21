@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <main p="x4 y10" text="center text-success">
+  <main text="center text-success flex flex-col gap-y-4">
     <div text-xl>
       <div i-ion-warning inline-block />
     </div>

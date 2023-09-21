@@ -24,7 +24,7 @@
 <script setup lang="ts">
   const list = [
     {
-      name: '国庆',
+      name: '国庆头像',
       path: '/',
     },
     {

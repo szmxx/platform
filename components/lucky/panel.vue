@@ -85,7 +85,7 @@
 
     drawOuterRing(ctx.value, {
       ringWidth: 10,
-      ringColor: '#DBC4F0',
+      ringColor: 'rgb(255, 165, 0)',
       numCircles: 18,
       circleOddColor: '#FFF3DA',
       circleEvenColor: '#F8DE22',
