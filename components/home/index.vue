@@ -9,12 +9,11 @@
           ref="containerRef"
           class="box-border h-75 <sm:h-55 overflow-hidden border-white rounded-20px aspect-1/1 relative"
         >
-          <nuxt-img
+          <img
             ref="imgRef"
-            src="template.png"
+            :src="templateUrl"
             alt="logo"
             class="h-full object-cover aspect-1/1"
-            provider="cloudinary"
           />
           <div :class="currentTemplate" class="rounded-20px"></div>
         </div>
@@ -66,6 +65,7 @@
 <script setup lang="ts">
   const imgRef = ref()
   const containerRef = ref()
+  const templateUrl = useImg('/template.png')
   import { GUOQING_SETTING } from '~/constants'
 
   const templateList = [

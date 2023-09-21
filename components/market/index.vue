@@ -8,11 +8,10 @@
         @load="onLoad"
       />
       <div :class="currentClassName" class="overflow-hidden">
-        <nuxt-img
+        <img
           ref="imgRef"
-          src="template.png"
+          :src="templateUrl"
           class="object-cover w-full h-full"
-          provider="cloudinary"
           alt="logo"
         />
         <MarketTool :class-name="currentClassName"></MarketTool>
@@ -57,7 +56,7 @@
   const imgRef = ref()
   const currentClassName = ref('mask-0')
   const currentPath = ref('iphone/iPhone/iPhone_14.png')
-
+  const templateUrl = useImg('/template.png')
   function onUpload(evt: FileList) {
     const reader = new FileReader()
     reader.onload = function (event) {
