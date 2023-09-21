@@ -276,10 +276,10 @@
     const radius = centerX - ringWidth * 2
     let fontSize = 12
     if (chunks.length >= 20) fontSize = 12
-    else if (chunks.length >= 16) fontSize = 14
-    else if (chunks.length >= 12) fontSize = 16
-    else if (chunks.length >= 8) fontSize = 18
-    else fontSize = 20
+    else if (chunks.length >= 16) fontSize = 13
+    else if (chunks.length >= 12) fontSize = 14
+    else if (chunks.length >= 8) fontSize = 15
+    else fontSize = 16
 
     chunks.forEach((sector, index) => {
       const sectorAngle =
