@@ -110,6 +110,12 @@ export default defineNuxtConfig({
           content: 'black-translucent',
         },
       ],
+      script: [
+        {
+          src: 'https://hm.baidu.com/hm.js?97ef136179357839bab56968ed27a5a4',
+          type: 'text/javascript',
+        },
+      ],
     },
   },
   imports: {
