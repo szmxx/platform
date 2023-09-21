@@ -116,7 +116,7 @@
   async function onDownload() {
     try {
       loading.value = true
-      await exportImage(containerRef.value, '图片.png')
+      await exportImage(containerRef.value, '国庆.png')
     } catch (error) {
       console.error(error)
     } finally {
