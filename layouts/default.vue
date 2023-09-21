@@ -18,7 +18,7 @@
 
 <style lang="scss" scoped>
   .bg {
-    background-image: url('~/assets/bg.png');
+    background-image: url('https://res.cloudinary.com/dcro7qdzl/image/upload/f_auto,q_auto:best,dpr_auto/assets/bg.png');
 
     @apply bg-cover bg-no-repeat blur-4 z-0 pointer-events-none;
   }

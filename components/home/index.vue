@@ -9,11 +9,12 @@
           ref="containerRef"
           class="box-border h-75 <sm:h-55 overflow-hidden border-white rounded-20px aspect-1/1 relative"
         >
-          <img
+          <nuxt-img
             ref="imgRef"
-            src="/template.png"
+            src="template.png"
             alt="logo"
             class="h-full object-cover aspect-1/1"
+            provider="cloudinary"
           />
           <div :class="currentTemplate" class="rounded-20px"></div>
         </div>
@@ -29,11 +30,12 @@
           class="relative rounded cursor-pointer center p-1 border"
           :class="{ 'border-primary': item.className === currentTemplate }"
         >
-          <img
+          <nuxt-img
             :src="item.src"
             :data-class="item.className"
             class="h-20 min-w-20 object-cover rounded"
             :alt="item.className"
+            provider="cloudinary"
           />
         </div>
       </div>
@@ -65,29 +67,30 @@
   const imgRef = ref()
   const containerRef = ref()
   import { GUOQING_SETTING } from '~/constants'
+
   const templateList = [
     {
-      src: '/template/0.png',
+      src: 'guoqin/template/0.png',
       className: 'mask-0',
     },
     {
-      src: '/template/1.png',
+      src: 'guoqin/template/1.png',
       className: 'mask-1',
     },
     {
-      src: '/template/2.png',
+      src: 'guoqin/template/2.png',
       className: 'mask-2',
     },
     {
-      src: '/template/3.png',
+      src: 'guoqin/template/3.png',
       className: 'mask-3',
     },
     {
-      src: '/template/4.png',
+      src: 'guoqin/template/4.png',
       className: 'mask-4',
     },
     {
-      src: '/template/5.png',
+      src: 'guoqin/template/5.png',
       className: 'mask-5',
     },
   ]
@@ -131,6 +134,9 @@
 </script>
 
 <style lang="scss" scoped>
+  $guoqin-0: 'https://res.cloudinary.com/dcro7qdzl/image/upload/f_auto,q_auto:best,dpr_auto/assets/guoqin/0.png';
+  $guoqin-4: 'https://res.cloudinary.com/dcro7qdzl/image/upload/f_auto,q_auto:best,dpr_auto/assets/guoqin/4.png';
+
   .gradient {
     /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: font-ziti;
@@ -145,7 +151,7 @@
   }
 
   .mask-0 {
-    background-image: url('~/assets/guoqin/0.png');
+    background-image: url($guoqin-0);
     mask: linear-gradient(115deg, #000 10%, transparent 70%, transparent);
 
     @apply bg-cover absolute top-0 left-0 h-full w-full;
@@ -165,7 +171,7 @@
   }
 
   .mask-2 {
-    background-image: url('~/assets/guoqin/0.png');
+    background-image: url($guoqin-0);
     mask: linear-gradient(115deg, #000 10%, transparent 70%, transparent);
     scale: -1 1;
 
@@ -175,7 +181,7 @@
   .mask-3 {
     @apply absolute bottom-3 border-4 border-white right-3 h-1/6 w-1/4 rounded-0 bg-cover rounded-2 overflow-hidden p-1;
 
-    background-image: url('~/assets/guoqin/0.png');
+    background-image: url($guoqin-0);
   }
 
   .mask-4 {
@@ -184,7 +190,7 @@
     @apply bg-cover absolute -top-15 -left-20 h-full w-full;
 
     transform: rotate(10deg);
-    background-image: url('~/assets/guoqin/4.png');
+    background-image: url($guoqin-4);
   }
 
   .mask-5 {
@@ -192,7 +198,7 @@
 
     @apply bg-cover absolute -top-15 -right-20 h-full w-full;
 
-    background-image: url('~/assets/guoqin/4.png');
+    background-image: url($guoqin-4);
     scale: -1 1;
     transform: rotate(10deg);
   }

@@ -20,7 +20,14 @@ export default defineNuxtConfig({
   ],
 
   image: {
-    quality: 50,
+    cloudinary: {
+      baseURL: 'https://res.cloudinary.com/dcro7qdzl/image/upload/assets',
+      modifiers: {
+        quality: 'auto:best',
+        dpr: 'auto',
+      },
+    },
+    domains: ['avatars0.githubusercontent.com'],
   },
 
   runtimeConfig: {
@@ -88,6 +95,7 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'preconnect', href: 'https://res.cloudinary.com' },
       ],
       meta: [
         {

@@ -17,8 +17,8 @@
       <VitePwaManifest />
     </Head>
     <Body>
+      <NuxtLoadingIndicator />
       <NuxtLayout>
-        <NuxtLoadingIndicator />
         <NuxtPage />
       </NuxtLayout>
     </Body>

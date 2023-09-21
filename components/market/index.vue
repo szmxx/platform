@@ -1,19 +1,30 @@
 <template>
   <div class="flex flex-col items-center gap-y-8 pt-4 pb-8 px-4 w-full">
-    <div ref="containerRef" class="relative">
+    <div v-show="!skeletonLoading" ref="containerRef" class="relative">
       <nuxt-img
         :src="currentPath"
         class="max-h-100 <sm:max-h-65 relative z-9 w-auto object-cover"
+        provider="cloudinary"
+        @load="onLoad"
       />
       <div :class="currentClassName" class="overflow-hidden">
-        <img
+        <nuxt-img
           ref="imgRef"
-          src="/template.png"
+          src="template.png"
           class="object-cover w-full h-full"
+          provider="cloudinary"
+          alt="logo"
         />
         <MarketTool :class-name="currentClassName"></MarketTool>
       </div>
     </div>
+    <van-skeleton v-show="skeletonLoading">
+      <template #template>
+        <van-skeleton-image
+          class="min-h-100 <sm:(min-h-65 min-w-32.5) rounded-6 min-w-50"
+        />
+      </template>
+    </van-skeleton>
     <MarketTemplate
       :current-class-name="currentClassName"
       @template="onTemplate"
@@ -45,7 +56,7 @@
   const containerRef = ref()
   const imgRef = ref()
   const currentClassName = ref('mask-0')
-  const currentPath = ref()
+  const currentPath = ref('iphone/iPhone/iPhone_14.png')
 
   function onUpload(evt: FileList) {
     const reader = new FileReader()
@@ -67,9 +78,14 @@
     }
   }
 
-  function onTemplate(className: string, path: unknown) {
+  function onTemplate(className: string, path: string) {
     currentClassName.value = className
     currentPath.value = path
+  }
+  const skeletonLoading = ref(true)
+  function onLoad() {
+    console.log('loaded')
+    skeletonLoading.value = false
   }
 </script>
 
