@@ -2,7 +2,6 @@ import { pwa } from './config/pwa'
 import { description } from './package.json'
 
 export default defineNuxtConfig({
-  extends: ['nuxt-seo-kit'],
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -12,6 +11,7 @@ export default defineNuxtConfig({
     '@vant/nuxt',
     '@nuxtjs/i18n',
     '@nuxt/image-edge',
+    '@nuxtseo/module',
   ],
 
   image: {
@@ -28,8 +28,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       name: process.env.NUXT_APP_NAME,
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
     },
+  },
+
+  site: {
+    titleSeparator: '·',
+    defaultLocale: 'zh-CN',
+    name: '猫染',
+    indexable: true,
+    url: process.env.NUXT_PUBLIC_SITE_URL,
   },
 
   experimental: {

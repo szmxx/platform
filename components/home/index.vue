@@ -5,17 +5,8 @@
         迎国庆换新颜
       </div>
       <UiUpload class="-mt-20" @change="onUpload">
-        <div
-          ref="containerRef"
-          class="box-border h-75 <sm:h-55 overflow-hidden border-white rounded-20px aspect-1/1 relative"
-        >
-          <img
-            ref="imgRef"
-            :src="templateUrl"
-            alt="logo"
-            class="h-full object-cover aspect-1/1"
-          />
-          <div :class="currentTemplate" class="rounded-20px"></div>
+        <div ref="containerRef">
+          <HomeItem :src="src" :template="template"></HomeItem>
         </div>
       </UiUpload>
       <div
@@ -27,7 +18,7 @@
           :key="item.className"
           :data-class="item.className"
           class="relative rounded cursor-pointer center p-1 border"
-          :class="{ 'border-primary': item.className === currentTemplate }"
+          :class="{ 'border-primary': item.className === template }"
         >
           <nuxt-img
             :src="item.src"
@@ -63,9 +54,8 @@
 </template>
 
 <script setup lang="ts">
-  const imgRef = ref()
   const containerRef = ref()
-  const templateUrl = useImg('/template.png')
+  const src = ref(useImg('/template.png'))
   import { GUOQING_SETTING } from '~/constants'
 
   const templateList = [
@@ -74,16 +64,29 @@
       className: 'mask-0',
     },
     {
-      src: 'guoqin/template/1.png',
-      className: 'mask-1',
-    },
-    {
       src: 'guoqin/template/2.png',
       className: 'mask-2',
     },
     {
+      src: 'guoqin/template/1.png',
+      className: 'mask-1',
+    },
+    {
+      src: 'guoqin/template/6.png',
+      className: 'mask-6',
+    },
+    {
       src: 'guoqin/template/3.png',
       className: 'mask-3',
+    },
+
+    {
+      src: 'guoqin/template/7.png',
+      className: 'mask-7',
+    },
+    {
+      src: 'guoqin/template/8.png',
+      className: 'mask-8',
     },
     {
       src: 'guoqin/template/4.png',
@@ -95,11 +98,11 @@
     },
   ]
   const state = useLocalStorage<Record<string, string>>(GUOQING_SETTING, {})
-  const currentTemplate = ref('mask-0')
+  const template = ref('mask-0')
 
   onMounted(() => {
-    if (state.value.current) imgRef.value.src = state.value.current
-    if (state.value.class) currentTemplate.value = state.value.class
+    if (state.value.current) src.value = state.value.current
+    if (state.value.class) template.value = state.value.class
   })
   function onUpload(evt: FileList) {
     const reader = new FileReader()
@@ -107,7 +110,7 @@
       if (event?.target?.result) {
         state.value.current = event?.target?.result?.toString()
       }
-      imgRef.value.src = event?.target?.result
+      src.value = event?.target?.result
     }
     // 读取文件内容
     reader.readAsDataURL(evt[0])
@@ -128,15 +131,12 @@
     const className = (evt.target as HTMLElement).dataset.class
     if (className) {
       state.value.class = className
-      currentTemplate.value = className
+      template.value = className
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  $guoqin-0: 'https://res.cloudinary.com/dcro7qdzl/image/upload/f_auto,q_auto:best,dpr_auto/assets/guoqin/0.png';
-  $guoqin-4: 'https://res.cloudinary.com/dcro7qdzl/image/upload/f_auto,q_auto:best,dpr_auto/assets/guoqin/4.png';
-
   .gradient {
     /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: font-ziti;
@@ -148,58 +148,5 @@
       rgb(var(--color-danger)),
       rgb(var(--color-primary))
     );
-  }
-
-  .mask-0 {
-    background-image: url($guoqin-0);
-    mask: linear-gradient(115deg, #000 10%, transparent 70%, transparent);
-
-    @apply bg-cover absolute top-0 left-0 h-full w-full;
-  }
-
-  .mask-1 {
-    @apply bg-cover border-12 border-b-0 border-danger absolute top-0 left-0 h-full w-full;
-
-    &::before {
-      /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
-      font-family: font-ziti;
-      content: '国庆快乐';
-      line-height: 1;
-
-      @apply absolute text-8 sm:text-10 bottom-0 text-white bg-danger center w-full p-2;
-    }
-  }
-
-  .mask-2 {
-    background-image: url($guoqin-0);
-    mask: linear-gradient(115deg, #000 10%, transparent 70%, transparent);
-    scale: -1 1;
-
-    @apply bg-cover absolute top-0 left-0 h-full w-full;
-  }
-
-  .mask-3 {
-    @apply absolute bottom-3 border-4 border-white right-3 h-1/6 w-1/4 rounded-0 bg-cover rounded-2 overflow-hidden p-1;
-
-    background-image: url($guoqin-0);
-  }
-
-  .mask-4 {
-    mask: linear-gradient(115deg, #000 20%, transparent 70%, transparent);
-
-    @apply bg-cover absolute -top-15 -left-20 h-full w-full;
-
-    transform: rotate(10deg);
-    background-image: url($guoqin-4);
-  }
-
-  .mask-5 {
-    mask: linear-gradient(115deg, #000 20%, transparent 70%, transparent);
-
-    @apply bg-cover absolute -top-15 -right-20 h-full w-full;
-
-    background-image: url($guoqin-4);
-    scale: -1 1;
-    transform: rotate(10deg);
   }
 </style>
