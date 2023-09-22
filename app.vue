@@ -5,10 +5,6 @@
  * @Description:
 -->
 <script setup lang="ts">
-  const config = useRuntimeConfig()
-  useHead({
-    title: config?.public?.name,
-  })
   const siteMeta = useSiteMeta()
   useHead({
     title: siteMeta.name,
@@ -28,7 +24,7 @@
       <VitePwaManifest />
       <SchemaOrgPerson
         :name="siteMeta.name"
-        image="/bg.jpeg"
+        :image="siteMeta.orgImage"
         :same-as="siteMeta.sameAs"
       />
     </Head>

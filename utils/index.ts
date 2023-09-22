@@ -1,36 +1,19 @@
-import { toPng } from 'html-to-image'
+import workerUrl from 'modern-screenshot/worker?url'
+import { createContext, destroyContext, domToPng } from 'modern-screenshot'
+import { saveAs } from 'file-saver'
+
 export async function exportImage(dom: HTMLElement, filename = '') {
   const res = await screenshot(dom)
-  download(res, filename)
+  saveAs(res, filename)
 }
 export async function screenshot(dom: HTMLElement) {
-  if (isMobileDevice()) {
-    let dataUrl = ''
-    const minDataLength = 2000000
-    let i = 0
-    const maxAttempts = 10
-
-    while (dataUrl.length < minDataLength && i < maxAttempts) {
-      dataUrl = await toPng(dom, {
-        height: dom.scrollHeight,
-      })
-      i += 1
-    }
-    return dataUrl
-  } else {
-    return await toPng(dom, {
-      height: dom.scrollHeight,
-    })
-  }
-}
-
-export function download(blobUrl: string, downloadName?: string) {
-  const a = document.createElement('a')
-  a.download = downloadName!
-  a.href = blobUrl
-  a.target = '_blank'
-  a.click()
-  URL.revokeObjectURL(blobUrl)
+  const context = await createContext(dom, {
+    workerUrl,
+    workerNumber: 1,
+  })
+  const url = await domToPng(context)
+  destroyContext(context)
+  return url
 }
 
 export function getRandomInt(min: number, max: number) {

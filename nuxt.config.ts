@@ -1,9 +1,3 @@
-/*
- * @Author: cola
- * @Date: 2023-08-06 17:42:54
- * @LastEditors: cola
- * @Description:
- */
 import { pwa } from './config/pwa'
 import { description } from './package.json'
 
@@ -34,6 +28,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       name: process.env.NUXT_APP_NAME,
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
     },
   },
 
