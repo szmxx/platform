@@ -22,6 +22,10 @@
   function onToggle() {
     isShow.value = !isShow.value
   }
+
+  defineExpose({
+    toggle: onToggle,
+  })
   onMounted(() => {
     onClickOutside(
       panelRef,

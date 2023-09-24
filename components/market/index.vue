@@ -1,10 +1,6 @@
 <template>
   <div class="flex flex-col items-center gap-y-8 pt-4 pb-8 px-4 w-full">
-    <div
-      ref="containerRef"
-      class="w-fit center"
-      :class="{ 'w-full': component === 'Composite' }"
-    >
+    <div ref="containerRef" class="w-fit center">
       <component
         :is="componentMap?.[component]"
         :src="src"

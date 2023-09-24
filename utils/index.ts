@@ -8,10 +8,12 @@ export async function exportImage(dom: HTMLElement, filename = '') {
 }
 export async function screenshot(dom: HTMLElement) {
   const context = await createContext(dom, {
-    workerUrl,
+    workerUrl: workerUrl as any,
     workerNumber: 1,
   })
-  const url = await domToPng(context)
+  const url = await domToPng(dom, {
+    scale: 4,
+  })
   destroyContext(context)
   return url
 }

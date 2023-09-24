@@ -1,0 +1,441 @@
+<template>
+  <div class="w-full h-full center relative flex-col overflow-hidden">
+    <div
+      v-show="isShowPanel"
+      ref="panelRef"
+      class="w-35% <sm:(absolute w-80% bg-default p-0) z-99 h-full absolute top-0 left-0 p-4"
+    >
+      <van-tabs class="w-full h-full overflow-y-auto" type="card">
+        <van-tab title="全局" class="px-4 py-2">
+          <ChatConfigTheme
+            @operate="onThemeOperate"
+            @time="onTime"
+            @bg="onTheme"
+          ></ChatConfigTheme>
+        </van-tab>
+        <van-tab title="套壳" class="px-4 py-2">
+          <ChatConfigShell
+            v-model="currentTime"
+            @config="onShellConfig"
+          ></ChatConfigShell>
+        </van-tab>
+        <van-tab title="聊天对象" class="px-4 py-2 h-full">
+          <ChatConfigObject
+            v-model="username"
+            @operate="onObjectOperate"
+          ></ChatConfigObject>
+        </van-tab>
+        <van-tab title="自身" class="px-4 py-2">
+          <ChatConfigSelf @operate="onObjectOperate"></ChatConfigSelf>
+        </van-tab>
+      </van-tabs>
+    </div>
+    <div
+      ref="chatRef"
+      class="bg-wx w-95 flex flex-col <sm:w-full h-full relative"
+    >
+      <ChatShell
+        :time="currentTime?.join?.(':')"
+        :config="currentShellConfig"
+      ></ChatShell>
+      <div
+        class="flex relative z-9 justify-between backdrop-blur-8 absolute top-0 border-b bg-wx p-2 items-center w-full"
+      >
+        <div class="flex cursor-pointer items-center gap-x-0">
+          <div i-ion-ios-arrow-back class="text-lg"></div>
+          <div class="text-sm bg-wxhint px-2 py-0.5 rounded-3">
+            {{ msgCount }}
+          </div>
+        </div>
+        <div class="self-center font-bold">{{ username }}</div>
+        <div i-ion-ios-more class="cursor-pointer"></div>
+      </div>
+      <div
+        ref="containRef"
+        class="h-[calc(100%-8rem)] chat-container text-wx py-4 overflow-y-auto px-2 flex gap-y-4 flex-col"
+      >
+        <ChatItem
+          v-for="(item, index) in list"
+          :key="item.id"
+          :chat="item"
+          :map="map"
+          :username="username"
+          @avatar="onAvatar"
+          @hongbao="onHongbao"
+          @payment="onPayment"
+          @delete="onDelete(index)"
+        ></ChatItem>
+      </div>
+      <div class="w-full flex-1 flex items-start px-2 py-1.5 bg-wxhover">
+        <div class="h-8 center w-full gap-x-2">
+          <div
+            class="border-1.5 rounded-full border-dark p-0.5 cursor-pointer"
+            @click="onTogglePanel"
+          >
+            <div i-ion-ios-wifi class="rotate-90deg text-xs"></div>
+          </div>
+          <div class="flex-1">
+            <input
+              v-model="inputVal"
+              class="w-full px-2 bg-default py-1 rounded"
+              @change="onChange"
+            />
+          </div>
+          <div class="text-color">
+            <UiLabelEmoji v-model="emojiVal">
+              <svg
+                t="1695407081290"
+                class="cursor-pointer"
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                p-id="6666"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
+                <path
+                  d="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 939.2c-235.2 0-427.2-192-427.2-427.2S276.8 84.8 512 84.8s427.2 192 427.2 427.2-192 427.2-427.2 427.2z"
+                  p-id="6667"
+                ></path>
+                <path
+                  d="M320 363.2m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z"
+                  p-id="6668"
+                ></path>
+                <path
+                  d="M704 363.2m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z"
+                  p-id="6669"
+                ></path>
+                <path
+                  d="M734.4 555.2H289.6c-17.6 0-33.6 8-46.4 20.8s-17.6 33.6-12.8 51.2C256 763.2 376 857.6 512 857.6s256-97.6 281.6-230.4c4.8-17.6 0-33.6-12.8-51.2-12.8-12.8-30.4-20.8-46.4-20.8zM512 772.8c-84.8 0-161.6-56-187.2-132.8H704c-30.4 81.6-107.2 132.8-192 132.8z"
+                  p-id="6670"
+                ></path>
+              </svg>
+            </UiLabelEmoji>
+          </div>
+          <div i-ion-add-circle-outline class="text-xl cursor-pointer"></div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="absolute <sm:hidden right-0 w-35% flex flex-col gap-y-2 p-2 h-full"
+    >
+      <div class="flex justify-between border-b p-1 items-center">
+        <div>编辑元数据</div>
+        <button class="px-2 py-1 bg-primary text-white rounded" @click="onSave">
+          保存
+        </button>
+      </div>
+      <ClientOnly>
+        <UiEditor ref="editorRef" v-model="listStr"></UiEditor>
+      </ClientOnly>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+  const username = ref('芊芊')
+  const emojiVal = ref('')
+  const msgCount = ref(87)
+  const containRef = ref()
+  const inputVal = ref('')
+  const isShowPanel = ref(false)
+  const panelRef = ref()
+  onMounted(() => {
+    const bool = isMobileDevice()
+    if (bool) {
+      onClickOutside(panelRef, () => {
+        isShowPanel.value = false
+      })
+    } else {
+      isShowPanel.value = true
+    }
+  })
+
+  function onTogglePanel() {
+    const bool = isMobileDevice()
+    if (bool) isShowPanel.value = !isShowPanel.value
+  }
+  const map = ref({
+    user: '/logo.svg',
+    self: '/logo.svg',
+  })
+
+  watch(emojiVal, (emoji) => {
+    inputVal.value += emoji
+  })
+  const list = ref([
+    {
+      role: 'self',
+      message: `来给我拎猕猴桃来给我拎
+      猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎
+      猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃`,
+    },
+    {
+      role: 'self',
+      type: 'yuyin',
+      minute: 8,
+      isNew: true,
+    },
+
+    {
+      role: 'self',
+      type: 'payment',
+      price: '100',
+    },
+    {
+      role: 'self',
+      type: 'hongbao',
+    },
+    {
+      role: 'user',
+      type: 'hongbao',
+    },
+    {
+      role: 'user',
+      type: 'payment',
+      price: '100',
+    },
+  ])
+
+  const listStr = computed(() => JSON.stringify(list.value, null, 2))
+
+  function onChange() {
+    addListItem({
+      role: 'self',
+      message: inputVal.value,
+    })
+
+    inputVal.value = ''
+  }
+
+  function scrollBottom() {
+    nextTick(() => {
+      containRef?.value?.scrollTo({
+        top: containRef?.value?.scrollHeight,
+        behavior: 'smooth',
+      })
+    })
+  }
+  function onAvatar(role: string, url: string) {
+    map.value[role] = url
+  }
+
+  function onHongbao(role: string) {
+    addListItem({
+      role: 'system',
+      type: 'hongbao',
+      status: role === 'self' ? 0 : 1,
+    })
+  }
+
+  function onPayment(role: string, price: number) {
+    if (role === 'self') {
+      addListItem({
+        role: 'user',
+        type: 'payment',
+        price: price,
+        status: 2,
+      })
+    } else {
+      addListItem({
+        role: 'self',
+        type: 'payment',
+        price: price,
+        status: 1,
+      })
+    }
+  }
+
+  function onDelete(index: number) {
+    list.value.splice(index, 1)
+  }
+
+  function onPaiyiPai() {
+    addListItem({
+      role: 'system',
+      type: 'paiyipai',
+    })
+  }
+
+  function addListItem(opt: Record<string, unknown> = {}) {
+    opt.id = crypto?.randomUUID?.()
+    list.value.push(opt)
+    scrollBottom()
+  }
+
+  function onTheme(opt: Record<string, unknown>) {
+    const { type, value, mode } = opt
+    switch (type) {
+      case 'color':
+        containRef.value.style.background = value
+
+        break
+      case 'custom':
+        if (value) containRef.value.style.backgroundImage = `url(${value})`
+        containRef.value.style.backgroundSize = mode
+        break
+    }
+  }
+
+  const chatRef = ref()
+  async function onThemeOperate(
+    opt: Record<string, unknown>,
+    cb?: (bool: boolean) => unknown,
+  ) {
+    const { type } = opt
+    switch (type) {
+      case 'clear':
+        list.value = []
+        break
+      case 'export':
+        try {
+          await exportImage(chatRef.value, '国庆.png')
+        } catch (error) {
+          console.error(error)
+        } finally {
+          cb?.(true)
+        }
+        break
+      case 'long_export':
+        break
+      default:
+        break
+    }
+  }
+
+  function onTime(time: number) {
+    addListItem({
+      role: 'system',
+      type: 'time',
+      time: time,
+    })
+  }
+
+  function onObjectOperate(opt: Record<string, unknown>) {
+    const { type, value, role, status } = opt
+    switch (type) {
+      case 'input':
+        addListItem({
+          role: role,
+          message: value,
+          status: status,
+        })
+        if (status === 1) {
+          addListItem({
+            role: 'system',
+            type: 'rejected',
+          })
+        }
+        if (status === 2) {
+          addListItem({
+            role: 'system',
+            type: 'delete',
+          })
+        }
+
+        break
+      case 'image':
+        addListItem({
+          role: role,
+          type: 'image',
+          url: value,
+        })
+
+        break
+      case 'hongbao':
+        addListItem({
+          role: role,
+          type: 'hongbao',
+        })
+
+        break
+      case 'payment':
+        addListItem({
+          role: role,
+          type: 'payment',
+          price: value,
+        })
+        break
+      case 'audio':
+        addListItem({
+          role: role,
+          type: 'yuyin',
+          minute: value,
+          isNew: true,
+        })
+        break
+      case 'video':
+        addListItem({
+          role: role,
+          type: 'video',
+          status: status,
+          time: value,
+        })
+        break
+      case 'paiyipai':
+        addListItem({
+          role: 'system',
+          type: 'paiyipai',
+          status: status,
+        })
+        break
+      case 'delete':
+        addListItem({
+          role: 'system',
+          type: 'delete',
+        })
+        break
+      case 'add':
+        addListItem({
+          role: 'user',
+          message: '我是' + username.value,
+        })
+        addListItem({
+          role: 'system',
+          type: 'add',
+        })
+        break
+    }
+  }
+
+  const editorRef = ref()
+  function onSave() {
+    const bool = editorRef.value.validate()
+    if (bool) {
+      const value = editorRef.value.getValue()
+      list.value = JSON.parse(value)
+    } else {
+      showFailToast('元数据没有正确格式化！')
+    }
+  }
+
+  const date = new Date()
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const currentShellConfig = ref({
+    system: 'ios',
+    battery: 100,
+    signal: 4,
+    wifi: 3,
+    g: '5G',
+    enable_wifi: true,
+    enable_battery: false,
+  })
+  const currentTime = ref([
+    hour < 10 ? '0' + hour : hour,
+    minute < 10 ? '0' + minute : minute,
+  ])
+
+  function onShellConfig(config: Record<string, unknown>) {
+    currentShellConfig.value = config
+  }
+</script>
+
+<style lang="scss" scoped>
+  @use '~/style/common/mixin' as *;
+
+  .chat-container {
+    @include scrollbar;
+  }
+</style>

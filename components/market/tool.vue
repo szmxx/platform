@@ -9,9 +9,12 @@
       </div>
     </div>
     <div class="flex tool-item gap-x-1">
-      <div i-ion-cellular></div>
-      <div i-ion-ios-wifi></div>
-      <div i-ion-ios-battery-full></div>
+      <!-- <div i-ion-cellular></div> -->
+      <!-- <div i-ion-ios-wifi></div> -->
+      <MarketToolSignal></MarketToolSignal>
+      <!-- <MarketToolWifi></MarketToolWifi> -->
+      <!-- <div i-ion-ios-battery-full></div> -->
+      <MarketToolBattery></MarketToolBattery>
     </div>
   </div>
 </template>

@@ -109,8 +109,8 @@
     reader.onload = function (event) {
       if (event?.target?.result) {
         state.value.current = event?.target?.result?.toString()
+        src.value = event?.target?.result?.toString()
       }
-      src.value = event?.target?.result
     }
     // 读取文件内容
     reader.readAsDataURL(evt[0])

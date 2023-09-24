@@ -24,7 +24,7 @@
 <script setup lang="ts">
   const list = [
     {
-      name: '国庆头像',
+      name: '国庆',
       path: '/',
     },
     {
@@ -35,10 +35,10 @@
       name: '营销',
       path: '/market',
     },
-    // {
-    //   name: '聊天',
-    //   path: '/chat',
-    // },
+    {
+      name: '聊天',
+      path: '/chat',
+    },
     // {
     //   name: '素材',
     //   path: '/design',

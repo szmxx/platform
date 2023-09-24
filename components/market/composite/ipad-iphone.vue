@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-fit center gap-x-8">
+  <div class="relative w-90 <sm:w-80 center gap-x-8">
     <MarketTemplateIpad
       template="iphone/iPad/iPad.png"
       :src="src"

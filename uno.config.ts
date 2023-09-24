@@ -94,6 +94,9 @@ export default defineConfig({
         color: 'var(--fill-primary)',
         hover: 'var(--fill-hover)',
         dark: 'var(--fill-dark)',
+        wx: 'var(--fill-wx)',
+        wxhover: 'var(--fill-wx-hover)',
+        wxhint: 'var(--fill-wx-hint)',
       },
       border: {
         color: 'var(--border-primary)',
@@ -104,6 +107,8 @@ export default defineConfig({
         auxiliary: 'var(--text-auxiliary)',
         hint: 'var(--text-hint)',
         light: 'var(--text-light)',
+        wx: 'var(--text-wx)',
+        wxhint: 'var(--text-wx-hint)',
       },
 
       white: 'var(--color-white)',

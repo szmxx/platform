@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full center gap-x-8">
+  <div class="relative w-230 <sm:w-160 center gap-x-8">
     <MarketTemplateMac
       template="iphone/Mac/iMac.png"
       :src="src"
@@ -9,7 +9,7 @@
       template="iphone/Mac/MacBook_Air_13.png"
       :src="src"
       class-name="mask-air"
-      class="absolute! scale-60 origin-b z-9 -translate-x-50%"
+      class="absolute! scale-60 origin-b z-9 -translate-x-45%"
     ></MarketTemplateMac>
     <MarketTemplateIpad
       template="iphone/iPad/iPad.png"

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full center">
+  <div class="relative w-fit center">
     <component
       :is="componentMap[component as keyof typeof componentMap]"
       :src="src"

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-fit center gap-x-8">
+  <div class="relative w-180 <sm:w-120 center gap-x-8">
     <MarketTemplateMac
       template="iphone/Mac/MacBook_Air_13.png"
       :src="src"

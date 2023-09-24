@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-fit center">
+  <div class="relative w-full <sm:w-full center">
     <MarketTemplateIphone
       template="iphone/iPhone/iPhone_14.png"
       :src="src"
