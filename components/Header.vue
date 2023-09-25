@@ -5,7 +5,7 @@
  * @Description:
 -->
 <template>
-  <div class="relative flex gap-x-2 items-center py-2 shadow-sm px-4">
+  <div class="relative flex gap-x-0 items-center py-2 shadow-sm px-4">
     <div class="mr-2 cursor-pointer" @click="onRedirect">
       <img src="/favicon.ico" class="h-10" alt="猫染" />
     </div>

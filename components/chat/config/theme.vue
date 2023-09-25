@@ -12,9 +12,6 @@
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
       <legend pl-2>动作</legend>
       <div class="flex w-full gap-2 flex-wrap items-center">
-        <div class="border rounded px-2 py-1 cursor-pointer" @click="onClear">
-          清除记录
-        </div>
         <div
           class="border rounded px-2 gap-x-1 center py-1 cursor-pointer"
           :class="{ 'pointer-events-none': exportLoading }"
@@ -46,6 +43,9 @@
           @click="onPreview"
         >
           预览视频
+        </div>
+        <div class="border rounded px-2 py-1 cursor-pointer" @click="onClear">
+          清除记录
         </div>
       </div>
     </fieldset>

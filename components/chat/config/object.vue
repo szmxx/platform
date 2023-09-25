@@ -8,6 +8,12 @@
           placeholder="请输入聊天对象昵称"
           class="border rounded flex-1 bg-color px-2 py-1"
         />
+        <button
+          class="bg-primary whitespace-nowrap h-7 px-4 text-white rounded"
+          @click="onRandom"
+        >
+          随机
+        </button>
       </div>
       <div class="flex items-end gap-x-2">
         <textarea
@@ -172,6 +178,12 @@
     },
   })
 
+  const userList = ['小米', '风尚', '一只特立独行的猪', '故城', '零号机']
+
+  function onRandom() {
+    const index = getRandomInt(0, userList.length - 1)
+    emit('update:modelValue', userList[index])
+  }
   const inputVal = ref()
   function onInput() {
     if (inputVal.value.trim()) {

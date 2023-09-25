@@ -26,7 +26,7 @@
             @operate="onObjectOperate"
           ></ChatConfigObject>
         </van-tab>
-        <van-tab title="自身" class="px-4 py-2">
+        <van-tab title="本人" class="px-4 py-2">
           <ChatConfigSelf @operate="onObjectOperate"></ChatConfigSelf>
         </van-tab>
       </van-tabs>
@@ -156,7 +156,7 @@
 <script setup lang="ts">
   import { saveAs } from 'file-saver'
   import { domToPng } from 'modern-screenshot'
-  const username = ref('用户')
+  const username = ref('')
   const emojiVal = ref('')
   const msgCount = ref(204)
   const containRef = ref()
@@ -303,8 +303,10 @@
       scale: 2,
       height: dom.clientHeight + scrollHeight - clientHeight,
       onCloneNode: function (cloned: any) {
-        cloned.querySelector('.chat-container').style['overflow'] = 'initial'
-        cloned.querySelector('.chat-container').style['height'] = 'initial'
+        if (scrollHeight > clientHeight) {
+          cloned.querySelector('.chat-container').style['overflow'] = 'initial'
+          cloned.querySelector('.chat-container').style['height'] = 'initial'
+        }
       },
     })
     saveAs(url, filename)
