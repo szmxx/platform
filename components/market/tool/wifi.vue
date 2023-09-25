@@ -1,14 +1,13 @@
 <template>
-  <div h-full overflow-hidden>
-    <div v-show="enabled" class="wave mt-0!" :class="{ inactive: wifi < 3 }">
+  <div v-if="enabled" class="h-full relative">
+    <div class="wave mt-0!" :class="{ inactive: wifi < 3 }">
       <div class="wave" :class="{ inactive: wifi < 2 }">
-        <div
-          class="wave mb-0! border-0.2em!"
-          :class="{ inactive: wifi < 1 }"
-        ></div>
+        <div class="wave border-3! mb-0!" :class="{ inactive: wifi < 1 }"></div>
       </div>
     </div>
-    <div v-show="!enabled" class="text-xs px-1">{{ g }}</div>
+  </div>
+  <div v-else-if="!enabled && system === 'ios'" class="text-xs line-height-1em">
+    {{ g }}
   </div>
 </template>
 
@@ -26,17 +25,20 @@
       type: String,
       default: '5G',
     },
+    system: {
+      type: String,
+      default: 'ios',
+    },
   })
 </script>
 
 <style scoped lang="scss">
   .wave {
-    border: 0.15em solid transparent;
+    border: 2px solid transparent;
     border-top-color: currentcolor;
-    border-top-color: rgb(var(--fill-dark));
     border-radius: 50%;
 
-    @apply m-0.35;
+    @apply m-1px center;
   }
 
   .wave.inactive {

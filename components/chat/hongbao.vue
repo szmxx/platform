@@ -1,26 +1,33 @@
 <template>
   <div
-    class="hongbao relative rounded-1.5 w-65% text-white cursor-pointer"
+    class="hongbao relative rounded-1 w-65% text-white cursor-pointer"
     :class="[chat.role, { done: chat?.status && chat?.status !== 0 }]"
   >
-    <div class="center px-3 py-2 gap-x-2">
+    <div class="flex items-center p-2 gap-x-1.5">
       <div
-        class="w-auto h-10 relative"
+        class="w-auto h-7.5 relative"
         :class="{ 'done-img': chat?.status && chat?.status !== 0 }"
       >
         <img
           src="~/assets/hongbao.png"
-          class="w-auto h-10 relative"
+          class="w-auto h-7.5 relative"
           alt="hongbao"
         />
       </div>
 
-      <div class="pr-3">
-        <div>恭喜发财，大吉大利</div>
-        <div v-show="text" class="text-xs pt-1 opacity-50">{{ text }}</div>
+      <div class="pr-2">
+        <div class="line-height-1em">恭喜发财，大吉大利</div>
+        <div
+          v-show="text"
+          class="pt-1 opacity-50 line-height-1em scale-80 origin-left"
+        >
+          {{ text }}
+        </div>
       </div>
     </div>
-    <div class="text-xs ml-3 mr-3 py-1 opacity-50 border-t border-color/10">
+    <div
+      class="mx-2.5 py-0.5 opacity-50 border-t border-color/10 line-height-1em scale-80 origin-left"
+    >
       微信红包
     </div>
   </div>
@@ -29,7 +36,7 @@
 <script setup lang="ts">
   const props = defineProps({
     chat: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
   })
@@ -94,7 +101,7 @@
     content: '';
     background: #fdf3e8;
 
-    @apply absolute w-82% h-2/5 rounded-b-6 rounded-t-6 left-9% z-9;
+    @apply absolute w-84% h-2/5 rounded-b-4 rounded-t-6 left-8% z-9;
   }
 
   .done {

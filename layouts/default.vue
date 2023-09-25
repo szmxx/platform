@@ -7,7 +7,7 @@
 <script setup></script>
 <template>
   <main class="w-full flex flex-col h-full overflow-hidden">
-    <Header></Header>
+    <Header class="rr-block"></Header>
     <div class="flex-1 bg-cover z-1 overflow-y-auto">
       <div class="bg absolute w-full h-92%"></div>
       <slot />

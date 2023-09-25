@@ -1,35 +1,58 @@
 <template>
-  <div class="w-full center text-xs">
+  <div
+    class="w-full center line-height-1em origin-center-center text-wxhint"
+    :class="{ 'text-color!': isCustomBg }"
+  >
     <template v-if="chat.type === 'time'">
-      <div class="text-wxhint">
+      <div class="bg-wx/60 p-1 rounded scale-80 origin-center-top">
         {{ chat.time }}
       </div>
     </template>
     <template v-if="chat.type === 'hongbao'">
-      <img src="~/assets/hongbao.png" class="w-auto h-4" alt="hongbao" />
-      <div v-if="chat.status === 0" class="center text-wxhint ml-1.5">
+      <div
+        v-if="chat.status === 0"
+        class="center p-1 rounded bg-wx/60 scale-80"
+      >
+        <img
+          src="~/assets/hongbao.png"
+          class="w-auto h-3.5 opacity-80 mr-1.5"
+          alt="hongbao"
+        />
         <div>{{ username }}</div>
         <div>领取了你的</div>
         <div class="text-primary">红包</div>
       </div>
-      <div v-if="chat.status === 1" class="center text-wxhint ml-1.5">
+      <div
+        v-if="chat.status === 1"
+        class="center bg-wx/60 p-1 scale-80 rounded"
+      >
+        <img
+          src="~/assets/hongbao.png"
+          class="w-auto h-3.5 opacity-80 mr-1.5"
+          alt="hongbao"
+        />
         <div>你领取了{{ username }}的</div>
         <div class="text-primary">红包</div>
       </div>
     </template>
     <template v-if="chat.type === 'paiyipai'">
-      <div v-if="chat.status === 1" class="font-bold text-wxhint flex gap-x-1">
+      <div
+        v-if="chat.status === 1"
+        class="font-bold scale-80 bg-wx/60 p-1 rounded flex gap-x-1"
+      >
         <div>"{{ username }}"</div>
         <div>拍了拍我</div>
       </div>
-      <div v-else class="flex text-wxhint gap-x-1">
+      <div v-else class="flex bg-wx/60 p-1 rounded scale-80 gap-x-1">
         <div>我拍了拍</div>
         <div>"{{ username }}"</div>
         <div>大哭</div>
       </div>
     </template>
     <template v-if="chat.type === 'delete'">
-      <div class="text-wxhint text-sm w-90% text-center">
+      <div
+        class="bg-wx/60 p-1 rounded origin-center-center line-height-1.5em scale-80 w-120% text-center"
+      >
         {{
           username
         }}开启了朋友验证，你还不是他（她）朋友。请先发送朋友验证请求，对方验证通过后，才能聊天。<a
@@ -40,15 +63,17 @@
       </div>
     </template>
     <template v-if="chat.type === 'add'">
-      <div class="flex flex-col center gap-y-3">
-        <div class="text-wxhint">以上是打招呼的内容</div>
-        <div class="text-wxhint">
+      <div class="flex flex-col origin-center-center center scale-80 gap-y-3">
+        <div class="bg-wx/60 p-1 rounded">以上是打招呼的内容</div>
+        <div class="bg-wx/60 p-1 rounded">
           你已添加了{{ username }}，现在可以开始聊天了。
         </div>
       </div>
     </template>
     <template v-if="chat.type === 'rejected'">
-      <div class="text-wxhint">消息已发出，但被对方拒收了。</div>
+      <div class="scale-80 bg-wx/60 p-1 rounded">
+        消息已发出，但被对方拒收了。
+      </div>
     </template>
   </div>
 </template>
@@ -56,12 +81,16 @@
 <script setup lang="ts">
   const props = defineProps({
     chat: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
     username: {
       type: String,
       default: '',
+    },
+    isCustomBg: {
+      type: Boolean,
+      default: false,
     },
   })
 </script>

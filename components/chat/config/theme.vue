@@ -1,20 +1,51 @@
 <template>
   <div class="flex flex-col gap-y-4 w-full">
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
+      <legend pl-2>系统设置</legend>
+      <div class="flex w-full relative flex-col gap-y-4">
+        <van-radio-group v-model="system" direction="horizontal">
+          <van-radio name="ios">苹果</van-radio>
+          <van-radio name="android">安卓</van-radio>
+        </van-radio-group>
+      </div>
+    </fieldset>
+    <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
       <legend pl-2>动作</legend>
-      <div class="flex w-full gap-x-2 items-center">
+      <div class="flex w-full gap-2 flex-wrap items-center">
         <div class="border rounded px-2 py-1 cursor-pointer" @click="onClear">
           清除记录
         </div>
-        <div class="border rounded px-2 py-1 cursor-pointer" @click="onExport">
+        <div
+          class="border rounded px-2 gap-x-1 center py-1 cursor-pointer"
+          :class="{ 'pointer-events-none': exportLoading }"
+          @click="onExport"
+        >
           <div v-show="exportLoading" class="loading h-4 w-4" />
           导出图片
         </div>
         <div
-          class="border rounded px-2 py-1 cursor-pointer"
+          class="border rounded px-2 py-1 gap-x-1 cursor-pointer"
+          :class="{ 'pointer-events-none': longLoading }"
           @click="onLongExport"
         >
+          <div v-show="longLoading" class="loading h-4 w-4" />
           导出长图
+        </div>
+        <div
+          class="border rounded relative px-2 py-1 gap-x-1 cursor-pointer"
+          @click="onRecord"
+        >
+          录制视频
+          <sup
+            v-show="recording"
+            class="w-2 h-2 flex absolute top-0 right-0 bg-danger rounded-full"
+          ></sup>
+        </div>
+        <div
+          class="border rounded relative px-2 py-1 gap-x-1 cursor-pointer"
+          @click="onPreview"
+        >
+          预览视频
         </div>
       </div>
     </fieldset>
@@ -83,34 +114,8 @@
 <script setup lang="ts">
   import dayjs from 'dayjs'
 
-  const colorList = [
-    '#A1CCD1',
-    '#E9B384',
-    '#7C9D96',
-    '#FEBBCC',
-    '#D4E2D4',
-    '#4682A9',
-    '#DBC4F0',
-    '#91C8E4',
-    '#916DB3',
-    '#C8AE7D',
-    '#6C3428',
-    '#F11A7B',
-    '#7A9D54',
-    '#FD8D14',
-    '#FBA1B7',
-    '#DAC0A3',
-    '#9ED2BE',
-    '#900C3F',
-    '#445069',
-    '#33BBC5',
-    '#E19898',
-    '#BEADFA',
-    '#F94C10',
-    '#614BC3',
-  ]
   const date = new Date()
-  const emit = defineEmits(['bg', 'time', 'operate'])
+  const emit = defineEmits(['bg', 'time', 'operate', 'update:modelValue'])
 
   const currentDate = ref([date.getMonth() + 1, date.getDate()])
   const currentTime = ref([date.getHours(), date.getMinutes()])
@@ -124,6 +129,23 @@
     const time = getTime(date.getTime())
     emit('time', time)
   }
+
+  const props = defineProps({
+    modelValue: {
+      type: String,
+      default: '',
+    },
+  })
+
+  const system = computed<string>({
+    set(value) {
+      emit('update:modelValue', value)
+    },
+    get() {
+      return props.modelValue
+    },
+  })
+
   const currentColor = ref()
   const checked = ref('auto')
   watch(currentColor, (newVal) => {
@@ -187,9 +209,33 @@
       },
     )
   }
+  const longLoading = ref(false)
   function onLongExport() {
-    emit('operate', {
-      type: 'long_export',
+    longLoading.value = true
+    emit(
+      'operate',
+      {
+        type: 'long_export',
+      },
+      () => {
+        longLoading.value = false
+      },
+    )
+  }
+  const recording = ref(false)
+
+  function onRecord() {
+    recording.value = !recording.value
+    ScreenRecorder?.toggle?.()
+  }
+
+  function onPreview() {
+    return navigateTo({
+      path: '/replay',
     })
   }
+
+  onUnmounted(() => {
+    ScreenRecorder?.stop?.()
+  })
 </script>

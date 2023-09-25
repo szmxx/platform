@@ -2,6 +2,7 @@
 @use './common/mixin' as *;
 @use './common/animation';
 @use './common/loading';
+@use './common/rrweb';
 
 /* stylelint-disable-next-line selector-id-pattern */
 html,

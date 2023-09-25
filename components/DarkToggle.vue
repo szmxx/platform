@@ -22,7 +22,7 @@
 </script>
 
 <template>
-  <button class="cursor-pointer" @click="toggleDark">
+  <button class="cursor-pointer rr-block" @click="toggleDark">
     <div
       class="i-ion-sunny-sharp"
       :class="{ 'i-ion-moon-sharp!': color?.preference === 'dark' }"

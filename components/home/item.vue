@@ -1,9 +1,9 @@
 <template>
   <div
-    class="box-border cursor-pointer h-75 <sm:h-55 overflow-hidden border-white rounded-20px aspect-1/1 relative"
+    class="box-border cursor-pointer h-75 <sm:h-55 overflow-hidden border-white aspect-1/1 relative"
   >
     <img :src="src" alt="logo" class="h-full object-cover aspect-1/1" />
-    <div :class="template" class="rounded-20px"></div>
+    <div :class="template" class="rounded"></div>
   </div>
 </template>
 

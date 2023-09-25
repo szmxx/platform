@@ -6,66 +6,81 @@
     @mouseover="mouseover"
     @mouseout="mouseout"
   >
-    <UiUpload w-8 h-8 @change="onUpload">
-      <img :src="map[chat.role]" class="w-8 h-8 object-cover rounded" />
+    <UiUpload w-7.2 h-7.2 @change="onUpload">
+      <img :src="map[chat.role]" class="w-7.2 h-7.2 object-cover rounded-0.5" />
     </UiUpload>
     <div
       v-if="!chat.type"
-      class="message relative flex items-center max-w-78% rounded whitespace-break-spaces break-all text-sm p-2"
-      :class="[chat.role]"
+      class="message relative flex items-center max-w-78% rounded whitespace-break-spaces break-all p-2"
+      :class="[chat.role, { 'max-w-72%!': chat.status && chat.status !== 0 }]"
     >
       {{ chat.message }}
     </div>
     <img
       v-else-if="chat.type === 'image'"
-      :src="chat.url"
+      :src="chat.url as string"
       class="max-w-75% rounded"
     />
     <ChatHongbao
       v-else-if="chat.type === 'hongbao'"
       :chat="chat"
       @click="onHongbao"
+      @touchstart="onHongbao"
     ></ChatHongbao>
     <ChatPayment
       v-else-if="chat.type === 'payment'"
       :chat="chat"
       @click="onPayment"
+      @touchstart="onPayment"
     >
     </ChatPayment>
     <ChatYuyin v-else-if="chat.type === 'yuyin'" :chat="chat"> </ChatYuyin>
     <ChatVideo v-else-if="chat.type === 'video'" :chat="chat"> </ChatVideo>
-    <div
-      v-show="isShowTool"
-      class="absolute top-0 p-1 rounded gap-x-1 bg-dark/30 text-white -translate-y-100% flex justify-end gap-y-1"
-    >
-      <div i-ion-trash-sharp class="cursor-pointer" @click="onDelete"></div>
+    <div v-show="isShowTool" class="absolute rr-block top-0 -translate-y-100%">
+      <div
+        i-ion-close-circle
+        class="cursor-pointer bg-primary"
+        @click="onDelete"
+      ></div>
     </div>
     <div
       v-if="!chat.type && chat.status && chat.status !== 0"
-      i-ion-alert-circle
-      class="bg-danger center h-full"
-    ></div>
+      class="h-full center -mx-1"
+    >
+      <div class="w-4.5 h-4.5 bg-danger rounded-full p-0.8">
+        <div i-ion-alert-outline class="bg-white center w-full h-full"></div>
+      </div>
+    </div>
   </div>
-  <ChatSystem v-else :chat="chat" :username="username"></ChatSystem>
+  <ChatSystem
+    v-else
+    :is-custom-bg="isCustomBg"
+    :chat="chat"
+    :username="username"
+  ></ChatSystem>
 </template>
 
 <script setup lang="ts">
   const props = defineProps({
     chat: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
     map: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
     username: {
       type: String,
       default: '',
     },
+    isCustomBg: {
+      type: Boolean,
+      default: false,
+    },
   })
 
-  const emit = defineEmits('delete', 'avatar', 'hongbao', 'payment')
+  const emit = defineEmits(['delete', 'avatar', 'hongbao', 'payment'])
   function onUpload(evt: FileList) {
     const reader = new FileReader()
     reader.onload = function (event) {
@@ -106,7 +121,7 @@
 
 <style lang="scss" scoped>
   .message {
-    line-height: 1.5;
+    line-height: 1.3;
   }
 
   .self {

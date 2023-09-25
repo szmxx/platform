@@ -38,10 +38,7 @@
 <template>
   <div class="h-full w-full relative flex items-center gap-x-2 rounded">
     <div class="center flex-1">
-      <div
-        class="h-8 w-8 center cursor-pointer rounded-full text-xl"
-        @click="onClick"
-      >
+      <div class="center cursor-pointer rounded-full text-xl" @click="onClick">
         <slot></slot>
       </div>
     </div>

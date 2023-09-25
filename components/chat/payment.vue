@@ -1,16 +1,16 @@
 <template>
   <div
-    class="payment relative w-65% rounded-1.5 text-white cursor-pointer"
+    class="payment relative w-65% rounded-1 text-white cursor-pointer"
     :class="[chat.role, { done: chat?.status && chat?.status !== 0 }]"
   >
-    <div class="flex items-center p-3 gap-x-2">
+    <div class="flex items-center p-2 gap-x-1.5">
       <div
         class="border-2 border-white rounded-full"
         :class="{ 'border-white/50': chat?.status && chat?.status !== 0 }"
       >
         <div
           v-if="chat?.status && chat?.status !== 0"
-          class="text-lg"
+          class="text-xl"
           i-material-symbols-done-rounded
         ></div>
         <svg
@@ -31,11 +31,15 @@
         </svg>
       </div>
       <div class="flex flex-col gap-y-1">
-        <div class="text-sm">¥{{ chat.price }}</div>
-        <div class="text-xs opacity-80">{{ text }}</div>
+        <div class="">¥{{ chat?.price }}</div>
+        <div class="opacity-80 line-height-1em scale-80 origin-left">
+          {{ text }}
+        </div>
       </div>
     </div>
-    <div class="text-xs ml-3 mr-3 py-1 border-t opacity-50 border-color/10">
+    <div
+      class="mx-2.5 py-0.5 border-t opacity-50 border-color/10 line-height-1em scale-80 origin-left"
+    >
       微信转账
     </div>
   </div>
@@ -44,7 +48,7 @@
 <script setup lang="ts">
   const props = defineProps({
     chat: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
   })

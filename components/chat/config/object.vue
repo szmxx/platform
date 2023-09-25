@@ -38,7 +38,7 @@
         </UiUpload>
 
         <div class="text-hint">表情包</div>
-        <div>TODO...</div>
+        <div>开发中...</div>
       </div>
     </fieldset>
     <fieldset
@@ -97,10 +97,9 @@
         </button>
       </div>
       <div class="flex w-full gap-x-2 items-center">
-        <div class="text-hint whitespace-nowrap">语音聊天</div>
-        <UiPopover class="flex flex-col gap-y-2">
+        <UiPopover class="flex flex-col flex-1 gap-y-2">
           <div class="flex gap-x-2">
-            <div>选择时长</div>
+            <div class="text-hint whitespace-nowrap">语音聊天</div>
             <div>{{ audioTime.join(' : ') }}</div>
           </div>
           <template #content>
@@ -120,10 +119,9 @@
         </button>
       </div>
       <div class="flex w-full gap-x-2 items-center">
-        <div class="text-hint whitespace-nowrap">视频聊天</div>
-        <UiPopover class="flex flex-col gap-y-2">
+        <UiPopover class="flex flex-1 flex-col gap-y-2">
           <div class="flex gap-x-2">
-            <div>选择时长</div>
+            <div class="text-hint whitespace-nowrap">视频聊天</div>
             <div>{{ videoTime.join(' : ') }}</div>
           </div>
           <template #content>

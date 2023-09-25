@@ -13,6 +13,7 @@ export async function screenshot(dom: HTMLElement) {
   })
   const url = await domToPng(dom, {
     scale: 4,
+    height: dom.scrollHeight,
   })
   destroyContext(context)
   return url

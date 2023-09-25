@@ -29,7 +29,7 @@
 <script setup lang="ts">
   const props = defineProps({
     chat: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
   })

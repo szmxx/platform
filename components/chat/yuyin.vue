@@ -6,10 +6,10 @@
   >
     <div
       i-material-symbols-wifi
-      class="rotate-90deg audio text-xs"
+      class="rotate-90deg center audio"
       :class="{ playing: playing }"
     ></div>
-    <div class="flex items-center gap-x-0.2 text-sm">
+    <div class="flex items-center gap-x-0.2">
       <div>{{ chat.minute }}</div>
       <div class="flex items-center gap-x-0.1">
         <div>'</div>
@@ -25,7 +25,7 @@
 <script setup lang="ts">
   const props = defineProps({
     chat: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
   })
@@ -34,9 +34,12 @@
   const timeout = ref()
   function onPlay() {
     clearTimeout(timeout.value)
-    timeout.value = setTimeout(() => {
-      playing.value = false
-    }, 1000 * props.chat.minute)
+    timeout.value = setTimeout(
+      () => {
+        playing.value = false
+      },
+      1000 * ((props?.chat?.minute as number) || 1),
+    )
     // eslint-disable-next-line vue/no-mutating-props
     props.chat.isNew = false
     playing.value = !playing.value

@@ -1,14 +1,25 @@
 <template>
   <div class="w-full h-8 flex justify-between px-4 items-center">
-    <div text-sm>{{ time }}</div>
+    <div class="font-1000 proportional-nums center">
+      <div>{{ time.split(':')[0] }}</div>
+      <div class="mb-0.5 px-0.2">:</div>
+      <div>{{ time.split(':')[1] }}</div>
+    </div>
     <div class="flex h-2.5 items-center gap-x-0.5">
-      <MarketToolSignal :signal="config.signal"></MarketToolSignal>
+      <MarketToolSignal
+        :system="system"
+        :signal="config.signal"
+        :g="config.g"
+      ></MarketToolSignal>
       <MarketToolWifi
         :g="config.g"
+        :system="system"
         :enabled="config.enable_wifi"
         :wifi="config.wifi"
+        :class="{ 'px-1': !config.enable_wifi }"
       ></MarketToolWifi>
       <MarketToolBattery
+        :system="system"
         :enabled="config.enable_battery"
         :percentage="config.battery"
       ></MarketToolBattery>
@@ -19,12 +30,16 @@
 <script setup lang="ts">
   defineProps({
     config: {
-      type: Object as PropType<string, unknown>,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => {},
     },
     time: {
       type: String,
       default: '',
+    },
+    system: {
+      type: String,
+      default: 'ios',
     },
   })
 </script>

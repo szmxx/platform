@@ -3,11 +3,12 @@
     <div
       v-show="isShowPanel"
       ref="panelRef"
-      class="w-35% <sm:(absolute w-80% bg-default p-0) z-99 h-full absolute top-0 left-0 p-4"
+      class="w-35% rr-block <sm:(absolute w-80% bg-default p-0) z-99 h-full absolute top-0 left-0 p-4"
     >
       <van-tabs class="w-full h-full overflow-y-auto" type="card">
         <van-tab title="全局" class="px-4 py-2">
           <ChatConfigTheme
+            v-model="system"
             @operate="onThemeOperate"
             @time="onTime"
             @bg="onTheme"
@@ -32,27 +33,31 @@
     </div>
     <div
       ref="chatRef"
-      class="bg-wx w-95 flex flex-col <sm:w-full h-full relative"
+      class="bg-wx w-78 <sm:w-full flex text-xs flex-col h-full relative"
     >
       <ChatShell
         :time="currentTime?.join?.(':')"
         :config="currentShellConfig"
+        :system="system"
+        class="pt-2 absolute bg-wx/95 backdrop-blur-8 z-9"
       ></ChatShell>
       <div
-        class="flex relative z-9 justify-between backdrop-blur-8 absolute top-0 border-b bg-wx p-2 items-center w-full"
+        class="flex absolute top-8 justify-between backdrop-blur-8 border-b border-dark/10 bg-wx/95 px-2 pb-1 pt-2 items-center w-full z-9"
       >
         <div class="flex cursor-pointer items-center gap-x-0">
-          <div i-ion-ios-arrow-back class="text-lg"></div>
-          <div class="text-sm bg-wxhint px-2 py-0.5 rounded-3">
+          <div i-ion-ios-arrow-left class="text-lg"></div>
+          <div class="bg-wxhint/20 -ml-1 px-1.5 py-0.5 rounded-3">
             {{ msgCount }}
           </div>
         </div>
-        <div class="self-center font-bold">{{ username }}</div>
-        <div i-ion-ios-more class="cursor-pointer"></div>
+        <div class="self-center line-height-1em mr-8 font-450">
+          {{ username }}
+        </div>
+        <div i-ion-ios-more class="cursor-pointer mr-2 font-bold"></div>
       </div>
       <div
         ref="containRef"
-        class="h-[calc(100%-8rem)] chat-container text-wx py-4 overflow-y-auto px-2 flex gap-y-4 flex-col"
+        class="h-[calc(100%-4.5rem)] chat-container text-wx pt-19 pb-2 overflow-y-auto px-2.5 flex gap-y-3 flex-col"
       >
         <ChatItem
           v-for="(item, index) in list"
@@ -60,29 +65,35 @@
           :chat="item"
           :map="map"
           :username="username"
+          :is-custom-bg="isCustomBg"
           @avatar="onAvatar"
           @hongbao="onHongbao"
           @payment="onPayment"
           @delete="onDelete(index)"
         ></ChatItem>
       </div>
-      <div class="w-full flex-1 flex items-start px-2 py-1.5 bg-wxhover">
+      <div
+        class="relative w-full center flex-1 px-2 items-start py-1 bg-wxhover"
+      >
         <div class="h-8 center w-full gap-x-2">
           <div
             class="border-1.5 rounded-full border-dark p-0.5 cursor-pointer"
             @click="onTogglePanel"
           >
-            <div i-ion-ios-wifi class="rotate-90deg text-xs"></div>
+            <div i-ion-ios-wifi class="rotate-90deg scale-80"></div>
           </div>
           <div class="flex-1">
             <input
               v-model="inputVal"
-              class="w-full px-2 bg-default py-1 rounded"
+              class="w-full px-2 bg-default py-1.5 rounded"
               @change="onChange"
             />
           </div>
-          <div class="text-color">
-            <UiLabelEmoji v-model="emojiVal">
+          <div>
+            <UiLabelEmoji
+              v-model="emojiVal"
+              class="border-1.5 center rounded-full border-dark/90 cursor-pointer"
+            >
               <svg
                 t="1695407081290"
                 class="cursor-pointer"
@@ -90,14 +101,10 @@
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 p-id="6666"
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 fill="currentColor"
               >
-                <path
-                  d="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 939.2c-235.2 0-427.2-192-427.2-427.2S276.8 84.8 512 84.8s427.2 192 427.2 427.2-192 427.2-427.2 427.2z"
-                  p-id="6667"
-                ></path>
                 <path
                   d="M320 363.2m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z"
                   p-id="6668"
@@ -113,12 +120,25 @@
               </svg>
             </UiLabelEmoji>
           </div>
-          <div i-ion-add-circle-outline class="text-xl cursor-pointer"></div>
+          <div
+            class="border-1.5 rounded-full center border-dark p-0.5 cursor-pointer"
+          >
+            <div i-ion-md-add class="cursor-pointer"></div>
+          </div>
+        </div>
+        <div
+          v-if="system === 'ios'"
+          class="absolute bottom-1.5 center bg-dark w-35% h-1 rounded"
+        ></div>
+        <div v-else class="absolute bottom-2 center gap-x-15% w-full">
+          <div i-ion-triangle-outline class="-rotate-90deg"></div>
+          <div class="rounded-full w-3.5 h-3.5 border-dark border-1"></div>
+          <div class="rounded-0.5 w-3 h-3 border-dark border-1"></div>
         </div>
       </div>
     </div>
     <div
-      class="absolute <sm:hidden right-0 w-35% flex flex-col gap-y-2 p-2 h-full"
+      class="absolute <sm:hidden rr-block right-0 w-35% flex flex-col gap-y-2 p-2 h-full"
     >
       <div class="flex justify-between border-b p-1 items-center">
         <div>编辑元数据</div>
@@ -134,9 +154,11 @@
 </template>
 
 <script setup lang="ts">
-  const username = ref('芊芊')
+  import { saveAs } from 'file-saver'
+  import { domToPng } from 'modern-screenshot'
+  const username = ref('用户')
   const emojiVal = ref('')
-  const msgCount = ref(87)
+  const msgCount = ref(204)
   const containRef = ref()
   const inputVal = ref('')
   const isShowPanel = ref(false)
@@ -164,39 +186,7 @@
   watch(emojiVal, (emoji) => {
     inputVal.value += emoji
   })
-  const list = ref([
-    {
-      role: 'self',
-      message: `来给我拎猕猴桃来给我拎
-      猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎
-      猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃来给我拎猕猴桃`,
-    },
-    {
-      role: 'self',
-      type: 'yuyin',
-      minute: 8,
-      isNew: true,
-    },
-
-    {
-      role: 'self',
-      type: 'payment',
-      price: '100',
-    },
-    {
-      role: 'self',
-      type: 'hongbao',
-    },
-    {
-      role: 'user',
-      type: 'hongbao',
-    },
-    {
-      role: 'user',
-      type: 'payment',
-      price: '100',
-    },
-  ])
+  const list = ref([])
 
   const listStr = computed(() => JSON.stringify(list.value, null, 2))
 
@@ -251,21 +241,16 @@
     list.value.splice(index, 1)
   }
 
-  function onPaiyiPai() {
-    addListItem({
-      role: 'system',
-      type: 'paiyipai',
-    })
-  }
-
   function addListItem(opt: Record<string, unknown> = {}) {
     opt.id = crypto?.randomUUID?.()
     list.value.push(opt)
     scrollBottom()
   }
 
+  const isCustomBg = ref(false)
   function onTheme(opt: Record<string, unknown>) {
     const { type, value, mode } = opt
+    if (value) isCustomBg.value = true
     switch (type) {
       case 'color':
         containRef.value.style.background = value
@@ -290,7 +275,7 @@
         break
       case 'export':
         try {
-          await exportImage(chatRef.value, '国庆.png')
+          await exportImage(chatRef.value, '微信.png')
         } catch (error) {
           console.error(error)
         } finally {
@@ -298,10 +283,31 @@
         }
         break
       case 'long_export':
+        try {
+          await screenshot(chatRef.value, '微信长图.png')
+        } catch (error) {
+          console.error(error)
+        } finally {
+          cb?.(true)
+        }
         break
       default:
         break
     }
+  }
+
+  async function screenshot(dom: HTMLElement, filename: string) {
+    const clientHeight = containRef.value.clientHeight
+    const scrollHeight = containRef.value.scrollHeight
+    const url = await domToPng(dom, {
+      scale: 2,
+      height: dom.clientHeight + scrollHeight - clientHeight,
+      onCloneNode: function (cloned: any) {
+        cloned.querySelector('.chat-container').style['overflow'] = 'initial'
+        cloned.querySelector('.chat-container').style['height'] = 'initial'
+      },
+    })
+    saveAs(url, filename)
   }
 
   function onTime(time: number) {
@@ -426,6 +432,8 @@
     hour < 10 ? '0' + hour : hour,
     minute < 10 ? '0' + minute : minute,
   ])
+
+  const system = ref('ios')
 
   function onShellConfig(config: Record<string, unknown>) {
     currentShellConfig.value = config
