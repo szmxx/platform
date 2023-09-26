@@ -2,6 +2,18 @@
   <div class="flex flex-col gap-y-4 w-full">
     <fieldset class="flex border min-w-auto rounded p-4 flex-col gap-y-4">
       <legend pl-2>基本设置</legend>
+      <div>
+        <div class="text-hint">头像设置</div>
+        <UiUpload @change="onAvatarUpload">
+          <div center>
+            <img
+              :src="(map['self']?.url as string) || ''"
+              class="h-15 w-15 bg-white aspect-1/1 object-cover rounded-0.5"
+            />
+            <div i-ion-plus-round class="text-6 text-primary absolute"></div>
+          </div>
+        </UiUpload>
+      </div>
       <van-radio-group
         v-model="status"
         class="flex gap-2"
@@ -16,6 +28,7 @@
           v-model="inputVal"
           placeholder="请输入聊天内容"
           class="border rounded flex-1 p-2 bg-color"
+          @keyup.enter="onInput"
         />
         <button
           class="bg-primary whitespace-nowrap h-7 px-4 text-white rounded"
@@ -68,6 +81,7 @@
           :min="0.01"
           class="border bg-color min-w-0 rounded flex-1 px-2 py-1"
         />
+
         <button
           class="bg-primary whitespace-nowrap py-1 px-4 text-white rounded"
           @click="onPayment"
@@ -79,16 +93,17 @@
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
       <legend pl-2>语音</legend>
       <div class="flex w-full gap-x-2 items-center">
-        <div class="text-hint">语音时长</div>
-        <input
-          v-model="audio"
-          :max="60"
-          :min="1"
-          type="number"
-          class="border rounded bg-color flex-1 px-2 py-1"
-        />
+        <div class="text-hint whitespace-nowrap">语音时长</div>
+
+        <van-slider v-model="audio" :max="60" :min="1" class="mx-2">
+          <template #button>
+            <div class="bg-primary p-1 text-xs rounded text-white">
+              {{ audio }}
+            </div>
+          </template>
+        </van-slider>
         <button
-          class="bg-primary py-1 px-4 text-white rounded"
+          class="bg-primary whitespace-nowrap py-1 px-4 text-white rounded"
           @click="onAudio"
         >
           发送
@@ -154,6 +169,13 @@
 </template>
 
 <script setup lang="ts">
+  const props = defineProps({
+    map: {
+      type: Object as PropType<Record<string, Record<string, unknown>>>,
+      default: () => {},
+    },
+  })
+
   const emit = defineEmits(['operate', 'update:modelValue'])
 
   function onUpload(evt: FileList) {
@@ -161,6 +183,7 @@
     reader.onload = function (event) {
       emit('operate', {
         role: 'self',
+        user: 'self',
         type: 'image',
         value: event?.target?.result,
       })
@@ -175,6 +198,7 @@
     if (inputVal.value.trim()) {
       emit('operate', {
         role: 'self',
+        user: 'self',
         type: 'input',
         value: inputVal.value,
         status: status.value,
@@ -187,6 +211,7 @@
   function onHongbao() {
     emit('operate', {
       role: 'self',
+      user: 'self',
       type: 'hongbao',
       value: hongbao.value,
     })
@@ -195,6 +220,7 @@
   function onPayment() {
     emit('operate', {
       role: 'self',
+      user: 'self',
       type: 'payment',
       value: payment.value,
     })
@@ -204,12 +230,14 @@
     emit('operate', {
       role: 'self',
       type: 'audio',
+      user: 'self',
       value: audio.value,
     })
   }
   function onPai() {
     emit('operate', {
       role: 'user',
+      user: 'self',
       type: 'paiyipai',
       status: 0,
     })
@@ -218,6 +246,7 @@
   function onAdd() {
     emit('operate', {
       role: 'user',
+      user: 'self',
       type: 'add',
     })
   }
@@ -227,6 +256,7 @@
   function onAudioTime() {
     emit('operate', {
       role: 'self',
+      user: 'self',
       type: 'video',
       status: 'audio',
       value: audioTime.value.join(':'),
@@ -237,9 +267,22 @@
   function onVideoTime() {
     emit('operate', {
       role: 'self',
+      user: 'self',
       type: 'video',
       status: 'video',
       value: videoTime.value.join(':'),
     })
+  }
+
+  function onAvatarUpload(evt: FileList) {
+    const reader = new FileReader()
+    reader.onload = function (event) {
+      if (props?.map?.['self']) {
+        // eslint-disable-next-line vue/no-mutating-props
+        props.map['self'].url = event?.target?.result
+      }
+    }
+    // 读取文件内容
+    reader.readAsDataURL(evt[0])
   }
 </script>

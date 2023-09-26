@@ -50,7 +50,12 @@ function getHtml(events: Array<eventWithTime>, config?: RRvideoConfig): string {
 <html>
   <head>
   <style>${rrwebStyle}</style>
-  <style>html, body {padding: 0; border: none; margin: 0;}</style>
+  <style>
+    html, body {padding: 0; border: none; margin: 0;}
+    .replayer-mouse {
+      display: none;
+    }
+  </style>
   </head>
   <body>
     <script>

@@ -1,11 +1,24 @@
 <template>
   <div
-    class="w-full center line-height-1em origin-center-center text-wxhint"
+    class="w-full center relative line-height-1em origin-center-center text-wxhint"
     :class="{ 'text-color!': isCustomBg }"
+    @mouseover="mouseover"
+    @mouseout="mouseout"
   >
     <template v-if="chat.type === 'time'">
-      <div class="bg-wx/60 p-1 rounded scale-80 origin-center-top">
+      <div class="bg-wx/60 p-1 rounded scale-80 origin-center-center">
         {{ chat.time }}
+      </div>
+    </template>
+    <template v-if="chat.type === 'revert'">
+      <div class="bg-wx/60 p-1 rounded scale-80 origin-center-center">
+        <template v-if="chat.status === 0">
+          你撤回了一条消息
+          <a class="cursor-pointer" style="color: #586b95">重新编辑</a>
+        </template>
+        <template v-if="chat.status === 1">
+          "{{ username }}" 撤回了一条消息
+        </template>
       </div>
     </template>
     <template v-if="chat.type === 'hongbao'">
@@ -75,6 +88,12 @@
         消息已发出，但被对方拒收了。
       </div>
     </template>
+    <div
+      v-if="isShowTool"
+      i-ion-close-circle
+      class="cursor-pointer rr-block absolute right-0 bg-primary/80"
+      @click="onDelete"
+    ></div>
   </div>
 </template>
 
@@ -93,4 +112,22 @@
       default: false,
     },
   })
+  const emit = defineEmits(['delete'])
+
+  function onDelete() {
+    emit('delete')
+  }
+
+  const isShowTool = ref(false)
+  function mouseover() {
+    isShowTool.value = true
+  }
+  const timeout = ref()
+  function mouseout() {
+    clearTimeout(timeout.value)
+
+    timeout.value = setTimeout(() => {
+      isShowTool.value = false
+    }, 500)
+  }
 </script>

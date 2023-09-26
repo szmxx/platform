@@ -6,7 +6,7 @@
       </div>
     </div>
   </div>
-  <div v-else-if="!enabled && system === 'ios'" class="text-xs line-height-1em">
+  <div v-else-if="!enabled" class="text-xs line-height-1em">
     {{ g }}
   </div>
 </template>
@@ -38,7 +38,8 @@
     border-top-color: currentcolor;
     border-radius: 50%;
 
-    @apply m-1px center;
+    /* stylelint-disable-next-line scss/operator-no-unspaced */
+    @apply m-1px center <sm:(border-2px m-2px);
   }
 
   .wave.inactive {

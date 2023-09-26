@@ -1,6 +1,15 @@
 <template>
   <div class="flex flex-col gap-y-2 w-full">
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
+      <legend pl-2>系统设置</legend>
+      <div class="flex w-full relative flex-col gap-y-4">
+        <van-radio-group v-model="system" direction="horizontal">
+          <van-radio name="ios">苹果</van-radio>
+          <van-radio name="android">安卓</van-radio>
+        </van-radio-group>
+      </div>
+    </fieldset>
+    <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
       <legend pl-2>组件设置</legend>
       <UiPopover class="flex flex-col gap-y-2">
         <div class="flex gap-x-2">
@@ -63,13 +72,14 @@
       </div>
       <div class="flex w-full gap-x-2 items-center">
         <div class="text-hint whitespace-nowrap">电池电量</div>
-        <input
-          v-model="config.battery"
-          :max="100"
-          :min="1"
-          type="number"
-          class="border rounded min-w-0 bg-color flex-1 px-2 py-1"
-        />
+
+        <van-slider v-model="config.battery" class="mx-2" :max="100" :min="1">
+          <template #button>
+            <div class="bg-primary p-1 text-xs rounded text-white">
+              {{ config.battery }}
+            </div>
+          </template>
+        </van-slider>
       </div>
     </fieldset>
   </div>
@@ -81,9 +91,22 @@
       type: Array as PropType<string[]>,
       default: () => [],
     },
+    system: {
+      type: String,
+      default: '',
+    },
   })
 
-  const emit = defineEmits(['config', 'update:modelValue'])
+  const emit = defineEmits(['config', 'update:modelValue', 'update:system'])
+
+  const system = computed<string>({
+    set(value) {
+      emit('update:system', value)
+    },
+    get() {
+      return props.system
+    },
+  })
 
   const currentTime = computed<string[]>({
     set(value) {

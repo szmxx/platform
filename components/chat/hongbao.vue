@@ -1,16 +1,16 @@
 <template>
   <div
-    class="hongbao relative rounded-1 w-65% text-white cursor-pointer"
+    class="hongbao relative rounded-1 w-78% text-white cursor-pointer"
     :class="[chat.role, { done: chat?.status && chat?.status !== 0 }]"
   >
-    <div class="flex items-center p-2 gap-x-1.5">
+    <div class="<sm:(gap-x-3 p-3) flex items-center p-2 gap-x-1.5">
       <div
-        class="w-auto h-7.5 relative"
+        class="w-auto h-8 <sm:(h-10) relative"
         :class="{ 'done-img': chat?.status && chat?.status !== 0 }"
       >
         <img
           src="~/assets/hongbao.png"
-          class="w-auto h-7.5 relative"
+          class="w-auto h-full relative aspect-40/39"
           alt="hongbao"
         />
       </div>

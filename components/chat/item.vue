@@ -2,54 +2,88 @@
   <div
     v-if="chat.role !== 'system'"
     class="flex gap-x-3 relative"
-    :class="{ 'flex-row-reverse': chat.role === 'self' }"
+    :class="{
+      'flex-row-reverse': chat.role === 'self',
+      'pt-1.5': chat.role !== 'self' && isGroup,
+    }"
     @mouseover="mouseover"
     @mouseout="mouseout"
   >
-    <UiUpload w-7.2 h-7.2 @change="onUpload">
-      <img :src="map[chat.role]" class="w-7.2 h-7.2 object-cover rounded-0.5" />
+    <UiUpload @change="onUpload">
+      <img
+        :src="(map[chat.user as keyof typeof map]?.url as string) || ''"
+        class="<sm:(max-w-9.2 max-h-9.2 min-w-9.2 min-h-9.2) max-w-8 max-w-8 min-w-8 min-h-8 bg-white aspect-1/1 object-cover rounded-0.5"
+      />
     </UiUpload>
     <div
-      v-if="!chat.type"
-      class="message relative flex items-center max-w-78% rounded whitespace-break-spaces break-all p-2"
-      :class="[chat.role, { 'max-w-72%!': chat.status && chat.status !== 0 }]"
+      class="h-full relative flex flex-col w-full"
+      :class="{ 'items-end': chat.role === 'self' }"
     >
-      {{ chat.message }}
+      <div
+        v-if="chat.role !== 'self' && isGroup"
+        class="text-hint -mt-1.5 mb-0.2 scale-80 origin-left-center"
+      >
+        {{ map[chat?.user as keyof typeof map]?.name }}
+      </div>
+      <div
+        v-if="!chat.type"
+        class="message <sm:(px-4!) relative w-fit flex items-center max-w-78% rounded whitespace-break-spaces break-all p-2"
+        :class="[
+          chat.role,
+          {
+            'max-w-72%!': chat.status && chat.status !== 0,
+            rejected: chat.status && chat.status !== 0,
+          },
+        ]"
+      >
+        {{ chat.message }}
+      </div>
+      <img
+        v-else-if="chat.type === 'image'"
+        :src="chat.url as string"
+        class="max-w-50% w-fit rounded"
+      />
+      <ChatHongbao
+        v-else-if="chat.type === 'hongbao'"
+        :chat="chat"
+        @click="onHongbao"
+        @touchstart="onHongbao"
+      ></ChatHongbao>
+      <ChatPayment
+        v-else-if="chat.type === 'payment'"
+        :chat="chat"
+        @click="onPayment"
+        @touchstart="onPayment"
+      >
+      </ChatPayment>
+      <ChatYuyin v-else-if="chat.type === 'yuyin'" :chat="chat"> </ChatYuyin>
+      <ChatVideo v-else-if="chat.type === 'video'" :chat="chat"> </ChatVideo>
     </div>
-    <img
-      v-else-if="chat.type === 'image'"
-      :src="chat.url as string"
-      class="max-w-75% rounded"
-    />
-    <ChatHongbao
-      v-else-if="chat.type === 'hongbao'"
-      :chat="chat"
-      @click="onHongbao"
-      @touchstart="onHongbao"
-    ></ChatHongbao>
-    <ChatPayment
-      v-else-if="chat.type === 'payment'"
-      :chat="chat"
-      @click="onPayment"
-      @touchstart="onPayment"
+
+    <div
+      v-show="isShowTool"
+      class="absolute flex gap-x-1 rr-block bg-dark/20 rounded top-0 -translate-y-100%"
     >
-    </ChatPayment>
-    <ChatYuyin v-else-if="chat.type === 'yuyin'" :chat="chat"> </ChatYuyin>
-    <ChatVideo v-else-if="chat.type === 'video'" :chat="chat"> </ChatVideo>
-    <div v-show="isShowTool" class="absolute rr-block top-0 -translate-y-100%">
+      <div
+        i-ion-arrow-up-a
+        class="cursor-pointer bg-primary/80"
+        @click="onUp"
+      ></div>
+      <div
+        i-ion-arrow-down-a
+        class="cursor-pointer bg-primary/80"
+        @click="onDown"
+      ></div>
+      <div
+        i-ion-arrow-undo
+        class="cursor-pointer bg-primary/80"
+        @click="onRevert"
+      ></div>
       <div
         i-ion-close-circle
-        class="cursor-pointer bg-primary"
+        class="cursor-pointer bg-primary/80"
         @click="onDelete"
       ></div>
-    </div>
-    <div
-      v-if="!chat.type && chat.status && chat.status !== 0"
-      class="h-full center -mx-1"
-    >
-      <div class="w-4.5 h-4.5 bg-danger rounded-full p-0.8">
-        <div i-ion-alert-outline class="bg-white center w-full h-full"></div>
-      </div>
     </div>
   </div>
   <ChatSystem
@@ -57,6 +91,7 @@
     :is-custom-bg="isCustomBg"
     :chat="chat"
     :username="username"
+    @delete="onDelete"
   ></ChatSystem>
 </template>
 
@@ -67,7 +102,7 @@
       default: () => {},
     },
     map: {
-      type: Object as PropType<Record<string, unknown>>,
+      type: Object as PropType<Record<string, Record<string, unknown>>>,
       default: () => {},
     },
     username: {
@@ -78,13 +113,25 @@
       type: Boolean,
       default: false,
     },
+    isGroup: {
+      type: Boolean,
+      default: false,
+    },
   })
 
-  const emit = defineEmits(['delete', 'avatar', 'hongbao', 'payment'])
+  const emit = defineEmits([
+    'delete',
+    'avatar',
+    'hongbao',
+    'payment',
+    'revert',
+    'down',
+    'up',
+  ])
   function onUpload(evt: FileList) {
     const reader = new FileReader()
     reader.onload = function (event) {
-      emit('avatar', props.chat.role, event?.target?.result)
+      emit('avatar', props.chat.user, event?.target?.result)
     }
     // 读取文件内容
     reader.readAsDataURL(evt[0])
@@ -107,6 +154,17 @@
 
   function onDelete() {
     emit('delete')
+  }
+
+  function onRevert() {
+    emit('revert', props?.chat?.role === 'user' ? 1 : 0)
+  }
+
+  function onUp() {
+    emit('up')
+  }
+  function onDown() {
+    emit('down')
   }
 
   const isShowTool = ref(false)
@@ -146,5 +204,11 @@
 
       @apply absolute -left-3.5 top-2 border-8 rounded;
     }
+  }
+
+  .message.rejected::after {
+    content: '';
+
+    @apply i-ion-alert-circle absolute h-full flex items-center bg-danger -left-1.8rem text-lg;
   }
 </style>

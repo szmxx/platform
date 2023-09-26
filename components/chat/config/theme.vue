@@ -1,16 +1,48 @@
 <template>
   <div class="flex flex-col gap-y-4 w-full">
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
-      <legend pl-2>系统设置</legend>
+      <legend pl-2>背景设置</legend>
       <div class="flex w-full relative flex-col gap-y-4">
-        <van-radio-group v-model="system" direction="horizontal">
-          <van-radio name="ios">苹果</van-radio>
-          <van-radio name="android">安卓</van-radio>
+        <div class="text-hint">颜色背景</div>
+        <UiColor v-model="currentColor" class="z-99"></UiColor>
+      </div>
+      <div class="flex flex-col gap-y-4">
+        <div class="text-hint">自定义背景</div>
+        <van-radio-group v-model="checked" direction="horizontal">
+          <van-radio name="auto">默认</van-radio>
+          <van-radio name="contain">包含</van-radio>
+          <van-radio name="cover">填充</van-radio>
         </van-radio-group>
+        <UiUpload class="w-fit" @change="onUpload">
+          <button
+            class="bg-primary center flex-col gap-x-1 h-15 w-15 text-white rounded"
+          >
+            <div i-ion-plus-round class="text-6"></div>
+          </button>
+        </UiUpload>
+      </div>
+      <div class="flex w-full relative flex-col gap-y-4">
+        <div class="text-hint">自定义水印</div>
+        <div class="flex gap-x-2">
+          <div>是否启用</div>
+          <van-switch v-model="isWatermark" size="16px"></van-switch>
+        </div>
+        <div class="flex gap-x-2 w-full items-center">
+          <div>水印内容</div>
+          <input
+            v-model="watermark"
+            placeholder=""
+            class="border rounded flex-1 bg-color px-2 py-1"
+          />
+        </div>
       </div>
     </fieldset>
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
       <legend pl-2>动作</legend>
+      <div class="flex gap-x-2">
+        <div>消息免打扰</div>
+        <van-switch v-model="isDisturb" size="16px"></van-switch>
+      </div>
       <div class="flex w-full gap-2 flex-wrap items-center">
         <div
           class="border rounded px-2 gap-x-1 center py-1 cursor-pointer"
@@ -49,31 +81,40 @@
         </div>
       </div>
     </fieldset>
+
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
-      <legend pl-2>背景设置</legend>
-      <div class="flex w-full relative flex-col gap-y-4">
-        <div class="text-hint">颜色背景</div>
-        <UiColor v-model="currentColor" class="z-99"></UiColor>
+      <legend pl-2>群聊模式</legend>
+      <div class="flex gap-x-2">
+        <div>是否开启</div>
+        <van-switch v-model="config.group" size="16px"></van-switch>
       </div>
-      <div class="flex flex-col gap-y-4">
-        <div class="text-hint">自定义背景</div>
-        <van-radio-group v-model="checked" direction="horizontal">
-          <van-radio name="auto">默认</van-radio>
-          <van-radio name="contain">包含</van-radio>
-          <van-radio name="cover">填充</van-radio>
-        </van-radio-group>
-        <UiUpload class="w-fit" @change="onUpload">
-          <button
-            class="bg-primary center flex-col gap-x-1 h-15 w-15 text-white rounded"
-          >
-            <div i-ion-plus-round class="text-6"></div>
-          </button>
-        </UiUpload>
+      <div class="flex w-full gap-x-2 items-center">
+        <div class="text-hint whitespace-nowrap">群聊名称</div>
+        <input
+          v-model="config.groupName"
+          class="border bg-color min-w-0 rounded flex-1 px-2 py-1"
+        />
+      </div>
+      <div class="flex w-full gap-x-2 items-center">
+        <div class="text-hint whitespace-nowrap">群聊人数</div>
+
+        <van-slider
+          v-model="config.groupNumber"
+          class="mx-2"
+          :max="500"
+          :min="3"
+        >
+          <template #button>
+            <div class="bg-primary p-1 text-xs rounded text-white">
+              {{ config.groupNumber }}
+            </div>
+          </template>
+        </van-slider>
       </div>
     </fieldset>
 
     <fieldset class="w-full flex border rounded p-4 flex-col gap-y-4">
-      <legend pl-2>时间设置</legend>
+      <legend pl-2>插入时间</legend>
       <div class="flex w-full relative flex-col gap-y-4">
         <UiPopover class="flex flex-col gap-y-2">
           <div class="flex gap-x-2">
@@ -114,9 +155,24 @@
 <script setup lang="ts">
   import dayjs from 'dayjs'
 
-  const date = new Date()
-  const emit = defineEmits(['bg', 'time', 'operate', 'update:modelValue'])
+  const props = defineProps({
+    disturb: {
+      type: Boolean,
+      default: false,
+    },
+  })
 
+  const date = new Date()
+  const emit = defineEmits(['bg', 'time', 'operate', 'update:disturb', 'group'])
+
+  const isDisturb = computed<boolean>({
+    set(value) {
+      emit('update:disturb', value)
+    },
+    get() {
+      return props.disturb
+    },
+  })
   const currentDate = ref([date.getMonth() + 1, date.getDate()])
   const currentTime = ref([date.getHours(), date.getMinutes()])
 
@@ -129,22 +185,6 @@
     const time = getTime(date.getTime())
     emit('time', time)
   }
-
-  const props = defineProps({
-    modelValue: {
-      type: String,
-      default: '',
-    },
-  })
-
-  const system = computed<string>({
-    set(value) {
-      emit('update:modelValue', value)
-    },
-    get() {
-      return props.modelValue
-    },
-  })
 
   const currentColor = ref()
   const checked = ref('auto')
@@ -238,4 +278,30 @@
   onUnmounted(() => {
     ScreenRecorder?.stop?.()
   })
+
+  const isWatermark = ref(false)
+  const watermark = ref('')
+  const { $watermark } = useNuxtApp()
+
+  watch([isWatermark, watermark], ([bool, value]) => {
+    if (bool) {
+      $watermark?.(value)
+    } else {
+      $watermark?.('')
+    }
+  })
+
+  const config = ref({
+    group: false,
+    groupName: '',
+    groupNumber: '',
+  })
+
+  watch(
+    config,
+    () => {
+      emit('group', config.value)
+    },
+    { immediate: true },
+  )
 </script>

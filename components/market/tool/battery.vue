@@ -34,7 +34,7 @@
       class="battery border android relative center rounded-0.6 h-full w-auto aspect-2/1"
     >
       <div
-        class="absolute h-90% bg-dark left-2.5% rounded-l-0.6 overflow-hidden"
+        class="absolute h-90% <sm:(h-80%) bg-dark left-2.5% rounded-l-0.6 overflow-hidden"
         :class="{ 'rounded-r-0.6': percentage > 90, enabled: enabled }"
         :style="{ width: `${(percentage * 90) / 100}%` }"
       ></div>

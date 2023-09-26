@@ -13,7 +13,7 @@
   const events = computed(() => ScreenRecorder.events)
   const loading = ref(false)
   onMounted(() => {
-    if (ScreenRecorder.events.length < 2) return navigateTo('/')
+    if (ScreenRecorder.events.length < 2) return navigateTo('/chat')
 
     const { clientHeight, clientWidth } = container.value
     const instance = new Player({

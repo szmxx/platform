@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex gap-x-1 cursor-pointer items-center px-3 py-1.5 relative rounded-1.5"
+    class="flex gap-x-1 w-fit cursor-pointer items-center p-2 relative rounded-1.5"
     :class="[chat.role]"
   >
     <div v-if="chat.role === 'self'" class="flex gap-x-2">

@@ -63,7 +63,8 @@
     "monaco-editor": "^0.43.0",
     "nuxt": "^3.7.3",
     "rrweb": "2.0.0-alpha.11",
-    "vant": "^4.6.8"
+    "vant": "^4.6.8",
+    "watermark-js-plus": "^1.3.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
